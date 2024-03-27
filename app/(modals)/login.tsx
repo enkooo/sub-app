@@ -79,14 +79,6 @@ const Page = () => {
       </View>
 
       <View style={{ gap: 20 }}>
-        <TouchableOpacity style={styles.btnOutline}>
-          <Ionicons
-            name="call-outline"
-            size={24}
-            style={defaultStyles.btnIcon}
-          />
-          <Text style={styles.btnOutlineText}>Continue with Phone</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnOutline}
           onPress={() => onSelectAuth(Strategy.Apple)}
