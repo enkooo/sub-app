@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 import { useWarmUpBrowser } from '../hooks/useWarmUpBrowser'
 import { defaultStyles } from '@/constants/Styles'
-import Colors from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useOAuth } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
@@ -49,7 +48,7 @@ const Page = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-white p-6">
       <TextInput
         autoCapitalize="none"
         placeholder="Email"
@@ -60,7 +59,7 @@ const Page = () => {
         <Text style={defaultStyles.btnText}>Continue</Text>
       </TouchableOpacity>
 
-      <View style={styles.separatorView}>
+      <View className="flex-row gap-2 items-center py-7">
         <View
           style={{
             flex: 1,
@@ -68,7 +67,7 @@ const Page = () => {
             borderBottomWidth: StyleSheet.hairlineWidth,
           }}
         />
-        <Text style={styles.separator}>or</Text>
+        <Text className="text-gray-600">or</Text>
         <View
           style={{
             flex: 1,
@@ -80,14 +79,14 @@ const Page = () => {
 
       <View style={{ gap: 20 }}>
         <TouchableOpacity
-          style={styles.btnOutline}
+          className="bg-white border border-gray-300 rounded-lg h-12 items-center flex-row px-2 justify-center"
           onPress={() => onSelectAuth(Strategy.Apple)}
         >
           <Ionicons name="logo-apple" size={24} style={defaultStyles.btnIcon} />
-          <Text style={styles.btnOutlineText}>Continue with Apple</Text>
+          <Text className="text-black font-semibold">Continue with Apple</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.btnOutline}
+          className="bg-white border border-gray-300 rounded-lg h-12 items-center flex-row px-2 justify-center"
           onPress={() => onSelectAuth(Strategy.Google)}
         >
           <Ionicons
@@ -95,10 +94,10 @@ const Page = () => {
             size={24}
             style={defaultStyles.btnIcon}
           />
-          <Text style={styles.btnOutlineText}>Continue with Google</Text>
+          <Text className="text-black font-semibold">Continue with Google</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.btnOutline}
+          className="bg-white border border-gray-300 rounded-lg h-12 items-center flex-row px-2 justify-center"
           onPress={() => onSelectAuth(Strategy.Facebook)}
         >
           <Ionicons
@@ -106,45 +105,13 @@ const Page = () => {
             size={24}
             style={defaultStyles.btnIcon}
           />
-          <Text style={styles.btnOutlineText}>Continue with Facebook</Text>
+          <Text className="text-black font-semibold">
+            Continue with Facebook
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 26,
-  },
-  separatorView: {
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-    marginVertical: 30,
-  },
-  separator: {
-    fontFamily: 'mon-sb',
-    color: Colors.grey,
-  },
-  btnOutline: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: Colors.grey,
-    height: 50,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-  },
-  btnOutlineText: {
-    color: '#000',
-    fontSize: 16,
-    fontFamily: 'mon-sb',
-  },
-})
 
 export default Page

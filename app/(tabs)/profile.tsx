@@ -8,7 +8,6 @@ import {
   Button,
   Image,
   SafeAreaView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -66,19 +65,22 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={defaultStyles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Profile</Text>
+      <View className="flex-row items-center justify-between p-6">
+        <Text className="text-2xl font-bold">Profile</Text>
         <Ionicons name="notifications-outline" size={26} />
       </View>
 
       {user && (
-        <View style={styles.card}>
+        <View className="items-center gap-5 m-6 rounded-2xl bg-white p-6 shadow-lg">
           <TouchableOpacity onPress={onCaptureImage}>
-            <Image source={{ uri: user?.imageUrl }} style={styles.avatar} />
+            <Image
+              source={{ uri: user?.imageUrl }}
+              className="w-24 h-24 rounded-full bg-gray-600"
+            />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', gap: 6 }}>
+          <View className="flex-row gap-1">
             {edit ? (
-              <View style={styles.editRow}>
+              <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
                 <TextInput
                   placeholder="First name"
                   value={firstName || ''}
@@ -101,8 +103,8 @@ const Profile = () => {
                 </TouchableOpacity>
               </View>
             ) : (
-              <View style={styles.editRow}>
-                <Text style={{ fontFamily: 'mon-b', fontSize: 22 }}>
+              <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
+                <Text className="font-bold text-2xl">
                   {firstName} {lastName}
                 </Text>
                 <TouchableOpacity onPress={() => setEdit(true)}>
@@ -132,50 +134,5 @@ const Profile = () => {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center',
-    padding: 24,
-  },
-  header: {
-    fontFamily: 'mon-b',
-    fontSize: 24,
-  },
-  card: {
-    backgroundColor: '#fff',
-    padding: 24,
-    borderRadius: 16,
-    marginHorizontal: 24,
-    marginTop: 24,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    shadowOffset: {
-      width: 1,
-      height: 2,
-    },
-    alignItems: 'center',
-    gap: 14,
-    marginBottom: 24,
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: Colors.grey,
-  },
-  editRow: {
-    height: 40,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-})
 
 export default Profile
