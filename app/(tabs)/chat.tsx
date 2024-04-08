@@ -3,7 +3,6 @@ import {
   View,
   FlatList,
   TextInput,
-  Button,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
@@ -18,9 +17,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([
     { role: 'system', content: 'You are a helpful assistant' },
   ])
-
   const [prompt, setPrompt] = useState('')
-
   const list = useRef<FlatList>(null)
 
   useEffect(() => {
@@ -31,8 +28,13 @@ const Chat = () => {
 
   const onSend = async () => {
     const userMessage = { role: 'user', content: prompt }
+    const loadingMessage = { role: 'bot', content: 'Thinking...' }
 
-    setMessages((existingMessages) => [...existingMessages, userMessage])
+    setMessages((existingMessages) => [
+      ...existingMessages,
+      userMessage,
+      loadingMessage,
+    ])
     setPrompt('')
 
     try {
@@ -42,7 +44,10 @@ const Chat = () => {
       )
       const answer = response.data.choices?.[0]?.message
 
-      setMessages((existingMessages) => [...existingMessages, answer])
+      setMessages((existingMessages) => [
+        ...existingMessages.slice(0, -1),
+        answer,
+      ])
     } catch (error) {
       console.error('Error:', error)
     }
