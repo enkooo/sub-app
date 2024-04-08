@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   View,
   FlatList,
@@ -6,31 +6,46 @@ import {
   Button,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native'
 import axios from 'axios'
 import { defaultStyles } from '@/constants/Styles'
 import Message from '@/components/Message'
+import { Ionicons } from '@expo/vector-icons'
+import Colors from '@/constants/Colors'
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    { role: 'system', content: 'Welcome to the chat!' },
-    { role: 'user', content: 'Hello!' },
-    {
-      role: 'assistant',
-      content:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus libero vel necessitatibus commodi, expedita doloremque iure consequatur numquam ad ipsam.',
-    },
+    { role: 'system', content: 'You are a helpful assistant' },
   ])
 
   const [prompt, setPrompt] = useState('')
 
-  const onSend = async () => {
-    setMessages((existingMessages) => [
-      ...existingMessages,
-      { role: 'user', content: prompt },
-    ])
+  const list = useRef<FlatList>(null)
 
+  useEffect(() => {
+    setTimeout(() => {
+      list.current?.scrollToEnd({ animated: true })
+    }, 100)
+  }, [messages])
+
+  const onSend = async () => {
+    const userMessage = { role: 'user', content: prompt }
+
+    setMessages((existingMessages) => [...existingMessages, userMessage])
     setPrompt('')
+
+    try {
+      const response = await axios.post(
+        'http://192.168.1.103:8081/completion',
+        [...messages, userMessage],
+      )
+      const answer = response.data.choices?.[0]?.message
+
+      setMessages((existingMessages) => [...existingMessages, answer])
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   return (
@@ -41,7 +56,8 @@ const Chat = () => {
         style={{ flex: 1 }}
       >
         <FlatList
-          data={messages}
+          ref={list}
+          data={messages.filter((message) => message.role !== 'system')}
           contentContainerStyle={{ gap: 10, padding: 10 }}
           renderItem={({ item }) => <Message message={item} />}
         />
@@ -54,7 +70,12 @@ const Chat = () => {
             value={prompt}
             onChangeText={setPrompt}
           />
-          <Button title="Send" onPress={onSend} />
+          <TouchableOpacity
+            onPress={onSend}
+            className="w-11 h-11 flex justify-center items-center border border-primary rounded-lg ml-2"
+          >
+            <Ionicons name="send-outline" size={24} color={Colors.primary} />
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </View>
