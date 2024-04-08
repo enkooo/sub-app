@@ -7,12 +7,13 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from '@expo/vector-icons'
-import { StatusBar } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+import { KeyboardAvoidingView, Platform } from 'react-native'
 
 const Layout = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar style="dark" />
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors.primary,
