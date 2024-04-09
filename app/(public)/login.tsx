@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
-import { useWarmUpBrowser } from '../hooks/useWarmUpBrowser'
+import { useWarmUpBrowser } from '../../hooks/useWarmUpBrowser'
 import { defaultStyles } from '@/constants/Styles'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useOAuth } from '@clerk/clerk-expo'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs } from 'expo-router'
+import { Tabs, useRouter } from 'expo-router'
 import Colors from '@/constants/Colors'
 import {
   Ionicons,
@@ -9,9 +9,16 @@ import {
 import { StatusBar } from 'expo-status-bar'
 import { useAuth } from '@clerk/clerk-expo'
 import LogoutButton from '@/components/LogoutButton'
+import { Pressable } from 'react-native'
 
 const Layout = () => {
+  const router = useRouter()
   const { isSignedIn } = useAuth()
+
+  const openChatHistory = () => {
+    router.push('/history')
+  }
+  const startNewChat = () => {}
 
   return (
     <>
@@ -52,6 +59,24 @@ const Layout = () => {
                 color={color}
                 size={size}
               />
+            ),
+            headerLeft: () => (
+              <Pressable onPress={startNewChat} className="ml-3">
+                <MaterialCommunityIcons
+                  name="pencil-box-outline"
+                  size={24}
+                  color="black"
+                />
+              </Pressable>
+            ),
+            headerRight: () => (
+              <Pressable onPress={openChatHistory} className="mr-3">
+                <MaterialCommunityIcons
+                  name="history"
+                  size={24}
+                  color="black"
+                />
+              </Pressable>
             ),
           }}
           redirect={!isSignedIn}

@@ -1,11 +1,12 @@
 import { useFonts } from 'expo-font'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { useSegments } from 'expo-router'
-import { Slot } from 'expo-router'
+import { TouchableOpacity } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 // import 'react-native-gesture-handler'
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -34,7 +35,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(public)',
 }
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -89,5 +90,22 @@ function RootLayoutNav() {
     }
   }, [isSignedIn])
 
-  return <Slot />
+  return (
+    <Stack>
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(public)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(modals)/history"
+        options={{
+          presentation: 'modal',
+          headerTitle: 'Chat history',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="close-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </Stack>
+  )
 }
