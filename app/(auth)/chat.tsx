@@ -12,11 +12,23 @@ import { defaultStyles } from '@/constants/Styles'
 import Message from '@/components/Message'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
+import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
+import {
+  addMessage,
+  removeLastMessage,
+  selectChatMessages,
+} from '@/state/chatSlice'
 
 const Chat = () => {
-  const [messages, setMessages] = useState([
-    { role: 'system', content: 'You are a helpful assistant' },
-  ])
+  const dispatch = useAppDispatch()
+  // dispatch(
+  //   addMessage({
+  //     role: 'system',
+  //     content: 'You are a helpful assistant',
+  //   }),
+  // )
+
+  const messages = useAppSelector(selectChatMessages)
   const [prompt, setPrompt] = useState('')
   const list = useRef<FlatList>(null)
 
@@ -30,11 +42,8 @@ const Chat = () => {
     const userMessage = { role: 'user', content: prompt }
     const loadingMessage = { role: 'bot', content: 'Thinking...' }
 
-    setMessages((existingMessages) => [
-      ...existingMessages,
-      userMessage,
-      loadingMessage,
-    ])
+    dispatch(addMessage(userMessage))
+    dispatch(addMessage(loadingMessage))
     setPrompt('')
 
     try {
@@ -44,10 +53,8 @@ const Chat = () => {
       )
       const answer = response.data.choices?.[0]?.message
 
-      setMessages((existingMessages) => [
-        ...existingMessages.slice(0, -1),
-        answer,
-      ])
+      dispatch(removeLastMessage())
+      dispatch(addMessage(answer))
     } catch (error) {
       console.error('Error:', error)
     }

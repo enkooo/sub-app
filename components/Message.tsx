@@ -1,9 +1,9 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { MessageProps } from '@/types'
+import { Message as MessageType } from '@/types'
 
 type PropTypes = {
-  message: MessageProps
+  message: MessageType
 }
 
 export default function Message({ message }: PropTypes) {

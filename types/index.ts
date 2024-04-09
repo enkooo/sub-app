@@ -1,4 +1,4 @@
-export type MessageProps = {
+export type Message = {
   role: string
   content: string
 }

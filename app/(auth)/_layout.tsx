@@ -10,15 +10,21 @@ import { StatusBar } from 'expo-status-bar'
 import { useAuth } from '@clerk/clerk-expo'
 import LogoutButton from '@/components/LogoutButton'
 import { Pressable } from 'react-native'
+import { useAppDispatch } from '@/hooks/rtk'
+import { newChat } from '@/state/chatSlice'
 
 const Layout = () => {
+  const dispatch = useAppDispatch()
+
   const router = useRouter()
   const { isSignedIn } = useAuth()
 
   const openChatHistory = () => {
     router.push('/history')
   }
-  const startNewChat = () => {}
+  const startNewChat = () => {
+    dispatch(newChat())
+  }
 
   return (
     <>

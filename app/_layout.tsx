@@ -7,6 +7,8 @@ import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { useSegments } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { Provider } from 'react-redux'
+import { store } from '@/store'
 // import 'react-native-gesture-handler'
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -64,12 +66,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ClerkProvider
-      publishableKey={CLERK_PUBLISHABLE_KEY!}
-      tokenCache={tokenCache}
-    >
-      <RootLayoutNav />
-    </ClerkProvider>
+    <Provider store={store}>
+      <ClerkProvider
+        publishableKey={CLERK_PUBLISHABLE_KEY!}
+        tokenCache={tokenCache}
+      >
+        <RootLayoutNav />
+      </ClerkProvider>
+    </Provider>
   )
 }
 
