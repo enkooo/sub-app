@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
+import { useSegments } from 'expo-router'
+import { Slot } from 'expo-router'
 // import 'react-native-gesture-handler'
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -74,32 +76,20 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const router = useRouter()
+  const segments = useSegments()
   const { isLoaded, isSignedIn } = useAuth()
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/(modals)/login')
-    }
-  }, [isLoaded])
+    if (!isLoaded) return
 
-  return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="(modals)/login"
-        options={{
-          title: 'Log in or sign up',
-          headerTitleStyle: {
-            fontFamily: 'mon-sb',
-          },
-          presentation: 'modal',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="close-outline" size={28} />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-    </Stack>
-  )
+    const inAuthGroup = segments[0] === '(auth)'
+
+    if (isSignedIn && !inAuthGroup) {
+      router.replace('/chat')
+    } else if (!isSignedIn) {
+      router.replace('/login')
+    }
+  }, [isSignedIn])
+
+  return <Slot />
 }

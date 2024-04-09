@@ -125,12 +125,6 @@ const Profile = () => {
       {isSignedIn && (
         <Button title="Log out" onPress={() => signOut()} color={Colors.dark} />
       )}
-
-      {!isSignedIn && (
-        <Link href="/(modals)/login" asChild>
-          <Button title="Log In" color={Colors.dark} />
-        </Link>
-      )}
     </SafeAreaView>
   )
 }

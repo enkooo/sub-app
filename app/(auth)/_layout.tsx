@@ -3,14 +3,15 @@ import { Tabs } from 'expo-router'
 import Colors from '@/constants/Colors'
 import {
   Ionicons,
-  FontAwesome5,
   MaterialCommunityIcons,
   MaterialIcons,
 } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
-import { KeyboardAvoidingView, Platform } from 'react-native'
+import { useAuth } from '@clerk/clerk-expo'
 
 const Layout = () => {
+  const { isSignedIn } = useAuth()
+
   return (
     <>
       <StatusBar style="dark" />
@@ -28,6 +29,7 @@ const Layout = () => {
               <Ionicons name="home-outline" color={color} size={size} />
             ),
           }}
+          redirect={!isSignedIn}
         />
         <Tabs.Screen
           name="analysis"
@@ -37,6 +39,7 @@ const Layout = () => {
               <MaterialIcons name="analytics" color={color} size={size} />
             ),
           }}
+          redirect={!isSignedIn}
         />
         <Tabs.Screen
           name="chat"
@@ -50,6 +53,7 @@ const Layout = () => {
               />
             ),
           }}
+          redirect={!isSignedIn}
         />
         <Tabs.Screen
           name="profile"
@@ -64,6 +68,7 @@ const Layout = () => {
               />
             ),
           }}
+          redirect={!isSignedIn}
         />
       </Tabs>
     </>
