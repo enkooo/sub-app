@@ -1,11 +1,9 @@
 import Colors from '@/constants/Colors'
 import { defaultStyles } from '@/constants/Styles'
-import { useAuth, useUser } from '@clerk/clerk-expo'
+import { useUser } from '@clerk/clerk-expo'
 import { Ionicons } from '@expo/vector-icons'
-import { Link } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
-  Button,
   Image,
   SafeAreaView,
   Text,
@@ -16,7 +14,6 @@ import {
 import * as ImagePicker from 'expo-image-picker'
 
 const Profile = () => {
-  const { signOut, isSignedIn } = useAuth()
   const { user } = useUser()
   const [firstName, setFirstName] = useState(user?.firstName)
   const [lastName, setLastName] = useState(user?.lastName)
@@ -65,13 +62,8 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={defaultStyles.container}>
-      <View className="flex-row items-center justify-between p-6">
-        <Text className="text-2xl font-bold">Profile</Text>
-        <Ionicons name="notifications-outline" size={26} />
-      </View>
-
       {user && (
-        <View className="items-center gap-5 m-6 rounded-2xl bg-white p-6 shadow-lg">
+        <View className="items-center gap-5 rounded-2xl bg-white p-6">
           <TouchableOpacity onPress={onCaptureImage}>
             <Image
               source={{ uri: user?.imageUrl }}
@@ -120,10 +112,6 @@ const Profile = () => {
           <Text>{email}</Text>
           <Text>Since {user?.createdAt?.toLocaleDateString()}</Text>
         </View>
-      )}
-
-      {isSignedIn && (
-        <Button title="Log out" onPress={() => signOut()} color={Colors.dark} />
       )}
     </SafeAreaView>
   )

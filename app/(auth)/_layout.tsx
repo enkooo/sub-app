@@ -8,6 +8,7 @@ import {
 } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useAuth } from '@clerk/clerk-expo'
+import LogoutButton from '@/components/LogoutButton'
 
 const Layout = () => {
   const { isSignedIn } = useAuth()
@@ -24,7 +25,7 @@ const Layout = () => {
         <Tabs.Screen
           name="index"
           options={{
-            tabBarLabel: 'Home',
+            headerTitle: 'Home',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="home-outline" color={color} size={size} />
             ),
@@ -34,7 +35,7 @@ const Layout = () => {
         <Tabs.Screen
           name="analysis"
           options={{
-            tabBarLabel: 'Analysis',
+            headerTitle: 'Analysis',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="analytics" color={color} size={size} />
             ),
@@ -44,7 +45,7 @@ const Layout = () => {
         <Tabs.Screen
           name="chat"
           options={{
-            tabBarLabel: 'Chat',
+            headerTitle: 'Chat',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="message-outline"
@@ -58,8 +59,7 @@ const Layout = () => {
         <Tabs.Screen
           name="profile"
           options={{
-            tabBarLabel: 'Profile',
-            headerShown: false,
+            headerTitle: 'My Profile',
             tabBarIcon: ({ color, size }) => (
               <Ionicons
                 name="person-circle-outline"
@@ -67,6 +67,7 @@ const Layout = () => {
                 size={size}
               />
             ),
+            headerRight: () => <LogoutButton />,
           }}
           redirect={!isSignedIn}
         />

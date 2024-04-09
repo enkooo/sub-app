@@ -1,9 +1,7 @@
-import { Ionicons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
-import { Stack, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
-import { TouchableOpacity } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { useSegments } from 'expo-router'
@@ -85,7 +83,7 @@ function RootLayoutNav() {
     const inAuthGroup = segments[0] === '(auth)'
 
     if (isSignedIn && !inAuthGroup) {
-      router.replace('/chat')
+      router.replace('/(auth)')
     } else if (!isSignedIn) {
       router.replace('/login')
     }
