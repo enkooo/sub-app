@@ -21,12 +21,6 @@ import {
 
 const Chat = () => {
   const dispatch = useAppDispatch()
-  // dispatch(
-  //   addMessage({
-  //     role: 'system',
-  //     content: 'You are a helpful assistant',
-  //   }),
-  // )
 
   const messages = useAppSelector(selectChatMessages)
   const [prompt, setPrompt] = useState('')
