@@ -1,8 +1,8 @@
 import { RootState } from '@/store'
-import { Message } from '@/types'
+import { Message } from '@/types/Message'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-interface ChatState {
+type ChatState = {
   messages: Message[]
 }
 

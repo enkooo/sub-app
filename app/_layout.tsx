@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { useSegments } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Provider } from 'react-redux'
 import { store } from '@/store'
 // import 'react-native-gesture-handler'
@@ -45,9 +45,8 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    mon: require('../assets/fonts/Montserrat-Regular.ttf'),
-    'mon-sb': require('../assets/fonts/Montserrat-SemiBold.ttf'),
-    'mon-b': require('../assets/fonts/Montserrat-Bold.ttf'),
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    ...FontAwesome.font,
   })
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.

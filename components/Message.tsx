@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { Message as MessageType } from '@/types'
+import { Message as MessageType } from '@/types/Message'
 
-type PropTypes = {
+type MessageProps = {
   message: MessageType
 }
 
-export default function Message({ message }: PropTypes) {
+export default function Message({ message }: MessageProps) {
   return (
     <View
       className="p-2 rounded-lg w-4/5"
