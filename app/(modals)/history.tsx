@@ -1,10 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Platform, View } from 'react-native'
-import {
-  GestureHandlerRootView,
-  ScrollView,
-} from 'react-native-gesture-handler'
+import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
 import chatHistoryJson from '@/assets/chatHistory.json'
 import ChatHistoryItem from '@/components/ChatHistoryItem'
 import { ChatHistoryItem as ChatHistoryItemType } from '@/types/ChatHistoryItem'
@@ -18,21 +15,16 @@ const History = () => {
     )
   }, [])
 
-  const scrollRef = useRef(null)
-
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-gray-50">
       <GestureHandlerRootView>
-        <ScrollView ref={scrollRef}>
-          {chatHistory.map((item) => (
-            <ChatHistoryItem
-              key={item.id}
-              simultaneousHandlers={scrollRef}
-              item={item}
-              onRemove={onRemove}
-            />
-          ))}
-        </ScrollView>
+        <FlatList
+          contentContainerStyle={{ marginTop: 10 }}
+          data={chatHistory}
+          renderItem={({ item }) => (
+            <ChatHistoryItem key={item.id} item={item} onRemove={onRemove} />
+          )}
+        />
       </GestureHandlerRootView>
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>

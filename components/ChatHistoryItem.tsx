@@ -11,8 +11,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
 
-interface ChatHistoryItemProps {
-  simultaneousHandlers: React.RefObject<PanGestureHandler> | null
+type ChatHistoryItemProps = {
   item: ChatHistoryItemType
   onRemove: (item: ChatHistoryItemType) => void
 }
@@ -21,11 +20,7 @@ const { width } = Dimensions.get('window')
 
 const TRANSLATE_X_THRESHOLD = -width * 0.3
 
-const ChatHistoryItem = ({
-  item,
-  onRemove,
-  simultaneousHandlers,
-}: ChatHistoryItemProps) => {
+const ChatHistoryItem = ({ item, onRemove }: ChatHistoryItemProps) => {
   const translateX = useSharedValue(0)
   const itemHeight = useSharedValue(80) // h-20
   const marginVertical = useSharedValue(10)
@@ -82,7 +77,8 @@ const ChatHistoryItem = ({
         <Ionicons name="trash-outline" size={30} color="black" />
       </Animated.View>
       <PanGestureHandler
-        simultaneousHandlers={simultaneousHandlers}
+        failOffsetY={[-5, 5]}
+        activeOffsetX={[-5, 5]}
         onGestureEvent={panGestureHandler}
       >
         <Animated.View

@@ -12,8 +12,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
 
-interface SubscriptionItemProps {
-  simultaneousHandlers: React.RefObject<PanGestureHandler> | null
+type SubscriptionItemProps = {
   item: Subscription
   onRemove: (item: Subscription) => void
 }
@@ -22,11 +21,7 @@ const { width } = Dimensions.get('window')
 
 const TRANSLATE_X_THRESHOLD = -width * 0.3
 
-const SubscriptionItem = ({
-  item,
-  onRemove,
-  simultaneousHandlers,
-}: SubscriptionItemProps) => {
+const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
   const translateX = useSharedValue(0)
   const itemHeight = useSharedValue(80) // h-20
   const marginVertical = useSharedValue(10)
@@ -83,7 +78,8 @@ const SubscriptionItem = ({
         <Ionicons name="trash-outline" size={30} color="black" />
       </Animated.View>
       <PanGestureHandler
-        simultaneousHandlers={simultaneousHandlers}
+        failOffsetY={[-5, 5]}
+        activeOffsetX={[-5, 5]}
         onGestureEvent={panGestureHandler}
       >
         <Animated.View
