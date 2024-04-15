@@ -98,6 +98,18 @@ function RootLayoutNav() {
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(public)" options={{ headerShown: false }} />
       <Stack.Screen
+        name="(modals)/addNewSubscription"
+        options={{
+          presentation: 'modal',
+          headerTitle: 'Add new subscription',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="close-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
         name="(modals)/history"
         options={{
           presentation: 'modal',

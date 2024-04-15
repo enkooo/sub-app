@@ -110,7 +110,6 @@ const Profile = () => {
             )}
           </View>
           <Text>{email}</Text>
-          <Text>Since {user?.createdAt?.toLocaleDateString()}</Text>
         </View>
       )}
     </SafeAreaView>

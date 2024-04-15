@@ -22,6 +22,7 @@ const Layout = () => {
   const openChatHistory = () => {
     router.push('/history')
   }
+
   const startNewChat = () => {
     dispatch(newChat())
   }
@@ -40,6 +41,14 @@ const Layout = () => {
             headerTitle: 'Home',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="home-outline" color={color} size={size} />
+            ),
+            headerRight: () => (
+              <Pressable
+                onPress={() => router.push('/addNewSubscription')}
+                className="mr-3"
+              >
+                <Ionicons name="add-circle-outline" size={24} color="black" />
+              </Pressable>
             ),
           }}
           redirect={!isSignedIn}

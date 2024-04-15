@@ -42,7 +42,7 @@ const Chat = () => {
 
     try {
       const response = await axios.post(
-        'http://192.168.1.103:8081/completion',
+        'http://192.168.0.113:8081/completion',
         [...messages, userMessage],
       )
       const answer = response.data.choices?.[0]?.message
