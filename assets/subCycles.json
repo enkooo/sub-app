@@ -1,0 +1,6 @@
+[
+  { "key": 1, "value": "day" },
+  { "key": 2, "value": "week" },
+  { "key": 3, "value": "month" },
+  { "key": 4, "value": "year" }
+]

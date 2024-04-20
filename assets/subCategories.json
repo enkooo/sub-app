@@ -1,0 +1,12 @@
+[
+  { "key": 1, "value": "entertainment" },
+  { "key": 2, "value": "sports" },
+  { "key": 3, "value": "news" },
+  { "key": 4, "value": "fitness" },
+  { "key": 5, "value": "education" },
+  { "key": 6, "value": "food" },
+  { "key": 7, "value": "technology" },
+  { "key": 8, "value": "health" },
+  { "key": 9, "value": "fashion" },
+  { "key": 10, "value": "other" }
+]

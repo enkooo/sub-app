@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import * as ImagePicker from 'expo-image-picker'
+import { useCaptureImage } from '@/hooks/useCaptureImage'
 
 const Profile = () => {
   const { user } = useUser()
@@ -44,13 +44,7 @@ const Profile = () => {
   }
 
   const onCaptureImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true,
-    })
+    const { result } = await useCaptureImage()
 
     if (!result.canceled) {
       const base64 = `data:image/png;base64,${result.assets[0].base64}`
