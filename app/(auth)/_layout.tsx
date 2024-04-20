@@ -45,7 +45,7 @@ const Layout = () => {
             headerRight: () => (
               <Pressable
                 onPress={() => router.push('/addNewSubscription')}
-                className="mr-3"
+                className="mr-5"
               >
                 <Ionicons name="add-circle-outline" size={24} color="black" />
               </Pressable>
@@ -75,7 +75,7 @@ const Layout = () => {
               />
             ),
             headerLeft: () => (
-              <Pressable onPress={startNewChat} className="ml-3">
+              <Pressable onPress={startNewChat} className="ml-5">
                 <MaterialCommunityIcons
                   name="pencil-box-outline"
                   size={24}
@@ -84,7 +84,7 @@ const Layout = () => {
               </Pressable>
             ),
             headerRight: () => (
-              <Pressable onPress={openChatHistory} className="mr-3">
+              <Pressable onPress={openChatHistory} className="mr-5">
                 <MaterialCommunityIcons
                   name="history"
                   size={24}

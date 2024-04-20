@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import {
   GestureHandlerRootView,
   FlatList,
@@ -9,10 +9,16 @@ import userSubscription from '@/assets/userSubscription.json'
 import { Subscription } from '@/types/Subscription'
 import SubscriptionItem from '@/components/SubscriptionItem'
 import Colors from '@/constants/Colors'
+import {
+  MultipleSelectList,
+  SelectList,
+} from 'react-native-dropdown-select-list'
 
 const Page = () => {
   const [refreshing, setRefreshing] = useState(false)
   const [subscriptions, setSubscriptions] = useState<Subscription[] | null>()
+  const [filteredSubscriptions, setFilteredSubscriptions] =
+    useState(subscriptions)
 
   const loadData = () => {
     setRefreshing(true)
@@ -33,12 +39,64 @@ const Page = () => {
     )
   }, [])
 
+  const categories = userSubscription.items.map((item) => ({
+    key: item.id,
+    value: item.category,
+  }))
+  const seenCategories = new Set()
+  const uniqueCategories = categories.filter((item) => {
+    if (!seenCategories.has(item.value)) {
+      seenCategories.add(item.value)
+      return true
+    }
+    return false
+  })
+
+  const [selectedCategories, setSelectedCategories] = useState(
+    uniqueCategories.map((item) => item.value),
+  )
+
+  useEffect(() => {
+    if (selectedCategories.length === 0) {
+      setFilteredSubscriptions(subscriptions)
+    } else {
+      setFilteredSubscriptions(
+        subscriptions?.filter((subscription) =>
+          selectedCategories.includes(subscription.category),
+        ),
+      )
+    }
+  }, [selectedCategories, subscriptions])
+
   return (
     <View className="flex-1 bg-gray-50">
+      <View className="w-[90%] mx-auto shadow rounded-lg mt-4">
+        <MultipleSelectList
+          setSelected={setSelectedCategories}
+          data={uniqueCategories}
+          save="value"
+          label="Categories"
+          placeholder="Filters"
+          boxStyles={{
+            backgroundColor: 'white',
+            borderRadius: 8,
+            padding: 10,
+            borderColor: 'white',
+          }}
+          dropdownStyles={{
+            backgroundColor: 'white',
+            borderRadius: 8,
+            padding: 10,
+            borderColor: 'white',
+          }}
+          badgeStyles={{
+            backgroundColor: Colors.primary,
+          }}
+        />
+      </View>
       <GestureHandlerRootView className="flex-1">
         <FlatList
-          contentContainerStyle={{ marginTop: 10 }}
-          data={subscriptions}
+          data={filteredSubscriptions}
           renderItem={({ item }) => (
             <SubscriptionItem key={item.id} item={item} onRemove={onRemove} />
           )}
