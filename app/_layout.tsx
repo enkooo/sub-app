@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Provider } from 'react-redux'
 import { store } from '@/store'
-// import 'react-native-gesture-handler'
+import 'react-native-gesture-handler'
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
