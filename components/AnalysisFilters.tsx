@@ -83,7 +83,7 @@ export default function AnalysisFilters({
           style={{
             backgroundColor: 'rgba(229 231 235 / 0.5)',
             borderRadius: 8,
-            marginTop: 10,
+            marginTop: 16,
           }}
         >
           {MONTHS.map((month) => (
@@ -103,7 +103,7 @@ export default function AnalysisFilters({
           style={{
             backgroundColor: 'rgba(229 231 235 / 0.5)',
             borderRadius: 8,
-            marginTop: 10,
+            marginTop: 16,
           }}
         >
           {YEARS.map((year) => (
