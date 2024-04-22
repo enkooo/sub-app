@@ -29,6 +29,12 @@ import BouncyCheckboxGroup, {
   CheckboxButton,
 } from 'react-native-bouncy-checkbox-group'
 import { Ionicons } from '@expo/vector-icons'
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated'
 
 const _iconStyle = () => ({
   height: 33,
@@ -120,6 +126,26 @@ const AddNewSubscription = () => {
     ])
     setNewCategoryName('')
     setIsNewCategory(false)
+  }
+
+  const expandHeight = useSharedValue(0)
+  const targetHeight = 150
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      height: expandHeight.value,
+      overflow: 'hidden',
+    }
+  })
+
+  const toggleExpansion = () => {
+    if (isNewCategory) {
+      expandHeight.value = withTiming(0, { duration: 500 }, () => {
+        runOnJS(setIsNewCategory)(false)
+      })
+    } else {
+      setIsNewCategory(true)
+      expandHeight.value = withTiming(targetHeight, { duration: 500 })
+    }
   }
 
   return (
@@ -241,9 +267,10 @@ const AddNewSubscription = () => {
                   <BouncyCheckboxGroup
                     data={cycles}
                     style={{ flexDirection: 'column', gap: 10 }}
-                    initial={cycles.findIndex(
-                      (item) => item.text === selectedCycle,
-                    )}
+                    initial={
+                      cycles.findIndex((item) => item.text === selectedCycle) +
+                      1
+                    }
                     onChange={(selectedItem: CheckboxButton) => {
                       setSelectedCycle(selectedItem.text as string)
                     }}
@@ -267,12 +294,11 @@ const AddNewSubscription = () => {
               }}
             >
               <BottomSheetView style={styles.contentContainer}>
-                <View className="flex-row justify-end">
-                  {isNewCategory ? (
+                {isNewCategory && (
+                  <Animated.View style={animatedStyle}>
                     <Pressable
-                      onPress={() => {
-                        setIsNewCategory(false)
-                      }}
+                      onPress={toggleExpansion}
+                      className="self-end mb-3 mt-4"
                     >
                       <Ionicons
                         name="close-circle-outline"
@@ -280,22 +306,6 @@ const AddNewSubscription = () => {
                         color="black"
                       />
                     </Pressable>
-                  ) : (
-                    <Pressable
-                      onPress={() => {
-                        setIsNewCategory(true)
-                      }}
-                    >
-                      <Ionicons
-                        name="add-circle-outline"
-                        size={24}
-                        color="black"
-                      />
-                    </Pressable>
-                  )}
-                </View>
-                {isNewCategory && (
-                  <View className="mt-4">
                     <TextInput
                       placeholder="Add new category"
                       placeholderTextColor={Colors.grey}
@@ -311,16 +321,31 @@ const AddNewSubscription = () => {
                         </Text>
                       </View>
                     </Pressable>
-                  </View>
+                  </Animated.View>
                 )}
-                <Text className="my-3 text-xl font-bold">Select category</Text>
+                <View className="flex-row justify-between items-center">
+                  <Text className="my-3 text-xl font-bold">
+                    Select category
+                  </Text>
+                  {!isNewCategory && (
+                    <Pressable onPress={toggleExpansion}>
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={24}
+                        color="black"
+                      />
+                    </Pressable>
+                  )}
+                </View>
                 <ScrollView className="mb-10">
                   <BouncyCheckboxGroup
                     data={categories}
                     style={{ flexDirection: 'column', gap: 10 }}
-                    initial={categories.findIndex(
-                      (item) => item.text === selectedCategory,
-                    )}
+                    initial={
+                      categories.findIndex(
+                        (item) => item.text === selectedCategory,
+                      ) + 1
+                    }
                     onChange={(selectedItem: CheckboxButton) => {
                       setSelectedCategory(selectedItem.text as string)
                     }}
