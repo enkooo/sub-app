@@ -28,6 +28,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BouncyCheckboxGroup, {
   CheckboxButton,
 } from 'react-native-bouncy-checkbox-group'
+import { Ionicons } from '@expo/vector-icons'
 
 const _iconStyle = () => ({
   height: 33,
@@ -61,8 +62,10 @@ const AddNewSubscription = () => {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedCycle, setSelectedCycle] = useState('')
   const [startDate, setStartDate] = useState('')
+  const [newCategoryName, setNewCategoryName] = useState('')
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isNewCategory, setIsNewCategory] = useState(false)
 
   const showDatePicker = () => {
     setDatePickerVisibility(true)
@@ -101,6 +104,22 @@ const AddNewSubscription = () => {
     cyclesBottomSheetModal.current?.close()
     categoriesBottomSheetModal.current?.close()
     setIsModalOpen(false)
+  }
+
+  const handleAddNewCategory = () => {
+    setCategories((prevCategories) => [
+      ...prevCategories,
+      {
+        id: prevCategories.length + 1,
+        text: newCategoryName.toLocaleLowerCase(),
+        fillColor: '#3856ff',
+        unFillColor: '#8fa0ff',
+        iconStyle: _iconStyle(),
+        textStyle: { textDecorationLine: 'none' },
+      },
+    ])
+    setNewCategoryName('')
+    setIsNewCategory(false)
   }
 
   return (
@@ -248,7 +267,52 @@ const AddNewSubscription = () => {
               }}
             >
               <BottomSheetView style={styles.contentContainer}>
-                <View className="flex-row justify-between "></View>
+                <View className="flex-row justify-end">
+                  {isNewCategory ? (
+                    <Pressable
+                      onPress={() => {
+                        setIsNewCategory(false)
+                      }}
+                    >
+                      <Ionicons
+                        name="close-circle-outline"
+                        size={24}
+                        color="black"
+                      />
+                    </Pressable>
+                  ) : (
+                    <Pressable
+                      onPress={() => {
+                        setIsNewCategory(true)
+                      }}
+                    >
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={24}
+                        color="black"
+                      />
+                    </Pressable>
+                  )}
+                </View>
+                {isNewCategory && (
+                  <View className="mt-4">
+                    <TextInput
+                      placeholder="Add new category"
+                      placeholderTextColor={Colors.grey}
+                      value={newCategoryName || ''}
+                      onChangeText={setNewCategoryName}
+                      autoCapitalize="none"
+                      style={[defaultStyles.inputField]}
+                    />
+                    <Pressable onPress={handleAddNewCategory}>
+                      <View className="bg-primary rounded-lg py-3 justify-center items-center mt-3 mb-6">
+                        <Text className="text-white font-bold">
+                          Add category
+                        </Text>
+                      </View>
+                    </Pressable>
+                  </View>
+                )}
                 <Text className="my-3 text-xl font-bold">Select category</Text>
                 <ScrollView className="mb-10">
                   <BouncyCheckboxGroup
