@@ -273,6 +273,12 @@ const AddNewSubscription = () => {
                     }
                     onChange={(selectedItem: CheckboxButton) => {
                       setSelectedCycle(selectedItem.text as string)
+                      setCycles((prevCycles) =>
+                        prevCycles.map((item) => ({
+                          ...item,
+                          disabled: item.text === selectedItem.text,
+                        })),
+                      )
                     }}
                   />
                 </ScrollView>
@@ -350,6 +356,12 @@ const AddNewSubscription = () => {
                     }
                     onChange={(selectedItem: CheckboxButton) => {
                       setSelectedCategory(selectedItem.text as string)
+                      setCategories((prevCategories) =>
+                        prevCategories.map((item) => ({
+                          ...item,
+                          disabled: item.text === selectedItem.text,
+                        })),
+                      )
                     }}
                   />
                 </ScrollView>
