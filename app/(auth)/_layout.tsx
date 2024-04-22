@@ -12,6 +12,7 @@ import LogoutButton from '@/components/LogoutButton'
 import { Pressable } from 'react-native'
 import { useAppDispatch } from '@/hooks/rtk'
 import { newChat } from '@/state/chatSlice'
+import { toggleFiltersModal } from '@/state/categoryFiltersSlice'
 
 const Layout = () => {
   const dispatch = useAppDispatch()
@@ -38,7 +39,8 @@ const Layout = () => {
         <Tabs.Screen
           name="index"
           options={{
-            headerTitle: 'Home',
+            headerTitle: 'Subscriptions',
+            tabBarLabel: 'Subscriptions',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="home-outline" color={color} size={size} />
             ),
@@ -50,6 +52,21 @@ const Layout = () => {
                 <Ionicons name="add-circle-outline" size={24} color="black" />
               </Pressable>
             ),
+            headerLeft: () => (
+              <Pressable
+                className="ml-5"
+                onPress={() => {
+                  console.log('toggleFiltersModal')
+                  dispatch(toggleFiltersModal())
+                }}
+              >
+                <Ionicons
+                  name="filter-circle-outline"
+                  size={24}
+                  color="black"
+                />
+              </Pressable>
+            ),
           }}
           redirect={!isSignedIn}
         />
@@ -57,6 +74,7 @@ const Layout = () => {
           name="analysis"
           options={{
             headerTitle: 'Analysis',
+            tabBarLabel: 'Analysis',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="analytics" color={color} size={size} />
             ),
@@ -66,7 +84,8 @@ const Layout = () => {
         <Tabs.Screen
           name="chat"
           options={{
-            headerTitle: 'Chat',
+            headerTitle: 'IA Assistant',
+            tabBarLabel: 'IA Assistant',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="message-outline"
@@ -98,7 +117,8 @@ const Layout = () => {
         <Tabs.Screen
           name="profile"
           options={{
-            headerTitle: 'My Profile',
+            headerTitle: 'Profile',
+            tabBarLabel: 'Profile',
             tabBarIcon: ({ color, size }) => (
               <Ionicons
                 name="person-circle-outline"
