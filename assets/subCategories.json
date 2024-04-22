@@ -1,12 +1,12 @@
 [
-  { "key": 1, "value": "entertainment" },
-  { "key": 2, "value": "sports" },
-  { "key": 3, "value": "news" },
-  { "key": 4, "value": "fitness" },
-  { "key": 5, "value": "education" },
-  { "key": 6, "value": "food" },
-  { "key": 7, "value": "technology" },
-  { "key": 8, "value": "health" },
-  { "key": 9, "value": "fashion" },
-  { "key": 10, "value": "other" }
+  { "id": 1, "value": "entertainment" },
+  { "id": 2, "value": "sports" },
+  { "id": 3, "value": "news" },
+  { "id": 4, "value": "fitness" },
+  { "id": 5, "value": "education" },
+  { "id": 6, "value": "food" },
+  { "id": 7, "value": "technology" },
+  { "id": 8, "value": "health" },
+  { "id": 9, "value": "fashion" },
+  { "id": 10, "value": "other" }
 ]
