@@ -129,7 +129,7 @@ const AddNewSubscription = () => {
   }
 
   const expandHeight = useSharedValue(0)
-  const targetHeight = 150
+  const targetHeight = 160
   const animatedStyle = useAnimatedStyle(() => {
     return {
       height: expandHeight.value,
@@ -296,16 +296,18 @@ const AddNewSubscription = () => {
               <BottomSheetView style={styles.contentContainer}>
                 {isNewCategory && (
                   <Animated.View style={animatedStyle}>
-                    <Pressable
-                      onPress={toggleExpansion}
-                      className="self-end mb-3 mt-4"
-                    >
-                      <Ionicons
-                        name="close-circle-outline"
-                        size={24}
-                        color="black"
-                      />
-                    </Pressable>
+                    <View className="flex-row justify-between items-center mb-3 mt-4">
+                      <Text className="text-xl font-bold">
+                        Add new category
+                      </Text>
+                      <Pressable onPress={toggleExpansion}>
+                        <Ionicons
+                          name="close-circle-outline"
+                          size={24}
+                          color="black"
+                        />
+                      </Pressable>
+                    </View>
                     <TextInput
                       placeholder="Add new category"
                       placeholderTextColor={Colors.grey}
@@ -317,7 +319,7 @@ const AddNewSubscription = () => {
                     <Pressable onPress={handleAddNewCategory}>
                       <View className="bg-primary rounded-lg py-3 justify-center items-center mt-3 mb-6">
                         <Text className="text-white font-bold">
-                          Add category
+                          Add new category
                         </Text>
                       </View>
                     </Pressable>
