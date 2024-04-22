@@ -39,8 +39,8 @@ const AddNewSubscription = () => {
     subCategories.map((category) => ({
       id: category.id,
       text: category.value,
-      fillColor: '#3856ff',
-      unFillColor: '#8fa0ff',
+      fillColor: Colors.primary,
+      unFillColor: Colors.primaryLight,
       iconStyle: _iconStyle(),
       textStyle: { textDecorationLine: 'none' },
     })),
@@ -49,8 +49,8 @@ const AddNewSubscription = () => {
     subCycles.map((cycle) => ({
       id: cycle.id,
       text: cycle.value,
-      fillColor: '#3856ff',
-      unFillColor: '#8fa0ff',
+      fillColor: Colors.primary,
+      unFillColor: Colors.primaryLight,
       iconStyle: _iconStyle(),
       textStyle: { textDecorationLine: 'none' },
     })),
@@ -108,8 +108,8 @@ const AddNewSubscription = () => {
       {
         id: prevCategories.length + 1,
         text: newCategoryName.toLocaleLowerCase(),
-        fillColor: '#3856ff',
-        unFillColor: '#8fa0ff',
+        fillColor: Colors.primary,
+        unFillColor: Colors.primaryLight,
         iconStyle: _iconStyle(),
         textStyle: { textDecorationLine: 'none' },
       },
@@ -227,6 +227,12 @@ const AddNewSubscription = () => {
               </Pressable>
             </View>
           </ScrollView>
+          {isModalOpen && (
+            <Pressable
+              className="flex-1 absolute top-0 left-0 right-0 bottom-0"
+              onPress={handleCloseBottomSheetModal}
+            />
+          )}
           <CheckboxesBottomSheetModal
             ref={cyclesBottomSheetModal}
             title="Select billing cycle"
@@ -237,8 +243,6 @@ const AddNewSubscription = () => {
             selectedItem={selectedCycle}
             setSelectedItem={setSelectedCycle}
             setData={setCycles}
-            isModalOpen={isModalOpen}
-            handleCloseBottomSheetModal={handleCloseBottomSheetModal}
           />
           <CheckboxesBottomSheetModal
             ref={categoriesBottomSheetModal}
@@ -254,8 +258,6 @@ const AddNewSubscription = () => {
             selectedItem={selectedCategory}
             setSelectedItem={setSelectedCategory}
             setData={setCategories}
-            isModalOpen={isModalOpen}
-            handleCloseBottomSheetModal={handleCloseBottomSheetModal}
           />
         </GestureHandlerRootView>
       </KeyboardAvoidingView>
