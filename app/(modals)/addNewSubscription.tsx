@@ -14,27 +14,20 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet,
 } from 'react-native'
 import subCategories from '@/assets/subCategories.json'
 import subCycles from '@/assets/subCycles.json'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import BouncyCheckboxGroup, {
-  CheckboxButton,
-} from 'react-native-bouncy-checkbox-group'
-import { Ionicons } from '@expo/vector-icons'
-import Animated, {
+import { CheckboxButton } from 'react-native-bouncy-checkbox-group'
+import {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   runOnJS,
 } from 'react-native-reanimated'
+import CheckboxesBottomSheetModal from '@/components/CheckboxesBottomSheetModal'
 
 const _iconStyle = () => ({
   height: 33,
@@ -76,11 +69,9 @@ const AddNewSubscription = () => {
   const showDatePicker = () => {
     setDatePickerVisibility(true)
   }
-
   const hideDatePicker = () => {
     setDatePickerVisibility(false)
   }
-
   const handleConfirmDate = (date: Date) => {
     setStartDate(date.toISOString().split('T')[0])
     hideDatePicker()
@@ -105,7 +96,6 @@ const AddNewSubscription = () => {
     categoriesBottomSheetModal.current?.present()
     setIsModalOpen(true)
   }, [])
-
   const handleCloseBottomSheetModal = () => {
     cyclesBottomSheetModal.current?.close()
     categoriesBottomSheetModal.current?.close()
@@ -237,170 +227,41 @@ const AddNewSubscription = () => {
               </Pressable>
             </View>
           </ScrollView>
-          {isModalOpen && (
-            <Pressable
-              className="flex-1 absolute top-0 left-0 right-0 bottom-0"
-              onPress={handleCloseBottomSheetModal}
-            />
-          )}
-          <BottomSheetModalProvider>
-            <BottomSheetModal
-              ref={cyclesBottomSheetModal}
-              index={1}
-              snapPoints={snapPoints}
-              backgroundStyle={{
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.23,
-                elevation: 4,
-              }}
-            >
-              <BottomSheetView style={styles.contentContainer}>
-                <View className="flex-row justify-between "></View>
-                <Text className="my-3 text-xl font-bold">
-                  Select billing cycle
-                </Text>
-                <ScrollView className="mb-10">
-                  <BouncyCheckboxGroup
-                    data={cycles}
-                    style={{ flexDirection: 'column', gap: 10 }}
-                    initial={
-                      cycles.findIndex((item) => item.text === selectedCycle) +
-                      1
-                    }
-                    onChange={(selectedItem: CheckboxButton) => {
-                      setSelectedCycle(selectedItem.text as string)
-                      setCycles((prevCycles) =>
-                        prevCycles.map((item) => ({
-                          ...item,
-                          disabled: item.text === selectedItem.text,
-                        })),
-                      )
-                    }}
-                  />
-                </ScrollView>
-              </BottomSheetView>
-            </BottomSheetModal>
-            <BottomSheetModal
-              ref={categoriesBottomSheetModal}
-              index={1}
-              snapPoints={snapPoints}
-              backgroundStyle={{
-                backgroundColor: 'white',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.23,
-                elevation: 4,
-              }}
-            >
-              <BottomSheetView style={styles.contentContainer}>
-                {isNewCategory && (
-                  <Animated.View style={animatedStyle}>
-                    <View className="flex-row justify-between items-center mb-3 mt-4">
-                      <Text className="text-xl font-bold">
-                        Add new category
-                      </Text>
-                      <Pressable onPress={toggleExpansion}>
-                        <Ionicons
-                          name="close-circle-outline"
-                          size={24}
-                          color="black"
-                        />
-                      </Pressable>
-                    </View>
-                    <TextInput
-                      placeholder="Add new category"
-                      placeholderTextColor={Colors.grey}
-                      value={newCategoryName || ''}
-                      onChangeText={setNewCategoryName}
-                      autoCapitalize="none"
-                      style={[defaultStyles.inputField]}
-                    />
-                    <Pressable onPress={handleAddNewCategory}>
-                      <View className="bg-primary rounded-lg py-3 justify-center items-center mt-3 mb-6">
-                        <Text className="text-white font-bold">
-                          Add new category
-                        </Text>
-                      </View>
-                    </Pressable>
-                  </Animated.View>
-                )}
-                <View className="flex-row justify-between items-center">
-                  <Text className="my-3 text-xl font-bold">
-                    Select category
-                  </Text>
-                  {!isNewCategory && (
-                    <Pressable onPress={toggleExpansion}>
-                      <Ionicons
-                        name="add-circle-outline"
-                        size={24}
-                        color="black"
-                      />
-                    </Pressable>
-                  )}
-                </View>
-                <ScrollView className="mb-10">
-                  <BouncyCheckboxGroup
-                    data={categories}
-                    style={{ flexDirection: 'column', gap: 10 }}
-                    initial={
-                      categories.findIndex(
-                        (item) => item.text === selectedCategory,
-                      ) + 1
-                    }
-                    onChange={(selectedItem: CheckboxButton) => {
-                      setSelectedCategory(selectedItem.text as string)
-                      setCategories((prevCategories) =>
-                        prevCategories.map((item) => ({
-                          ...item,
-                          disabled: item.text === selectedItem.text,
-                        })),
-                      )
-                    }}
-                  />
-                </ScrollView>
-              </BottomSheetView>
-            </BottomSheetModal>
-          </BottomSheetModalProvider>
+          <CheckboxesBottomSheetModal
+            ref={cyclesBottomSheetModal}
+            title="Select billing cycle"
+            snapPoints={snapPoints}
+            animatedStyle={animatedStyle}
+            toggleExpansion={toggleExpansion}
+            data={cycles}
+            selectedItem={selectedCycle}
+            setSelectedItem={setSelectedCycle}
+            setData={setCycles}
+            isModalOpen={isModalOpen}
+            handleCloseBottomSheetModal={handleCloseBottomSheetModal}
+          />
+          <CheckboxesBottomSheetModal
+            ref={categoriesBottomSheetModal}
+            title="Select category"
+            snapPoints={snapPoints}
+            isNewItem={isNewCategory}
+            animatedStyle={animatedStyle}
+            toggleExpansion={toggleExpansion}
+            newItemName={newCategoryName}
+            setNewItemName={setNewCategoryName}
+            handleAddNewItem={handleAddNewCategory}
+            data={categories}
+            selectedItem={selectedCategory}
+            setSelectedItem={setSelectedCategory}
+            setData={setCategories}
+            isModalOpen={isModalOpen}
+            handleCloseBottomSheetModal={handleCloseBottomSheetModal}
+          />
         </GestureHandlerRootView>
       </KeyboardAvoidingView>
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  boxStyles: {
-    backgroundColor: 'white',
-    borderColor: '#ABABAB',
-    borderWidth: 1,
-    borderRadius: 8,
-    width: '100%',
-    paddingHorizontal: 10,
-    alignItems: 'center',
-  },
-  dropdownStyles: {
-    backgroundColor: 'white',
-    borderColor: '#ABABAB',
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  container: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    backgroundColor: 'grey',
-  },
-  contentContainer: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-})
 
 export default AddNewSubscription
