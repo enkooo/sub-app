@@ -1,5 +1,7 @@
 import React from 'react'
-import { Tabs, useRouter } from 'expo-router'
+import { Redirect, useRouter } from 'expo-router'
+import { useSession } from '../../../ctx'
+import { Tabs } from 'expo-router'
 import Colors from '@/constants/Colors'
 import {
   Ionicons,
@@ -7,18 +9,25 @@ import {
   MaterialIcons,
 } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
-import { useAuth } from '@clerk/clerk-expo'
 import LogoutButton from '@/components/LogoutButton'
-import { Pressable } from 'react-native'
+import { Pressable, Text } from 'react-native'
 import { useAppDispatch } from '@/hooks/rtk'
 import { newChat } from '@/state/chatSlice'
 import { toggleFiltersModal } from '@/state/categoryFiltersSlice'
 
-const Layout = () => {
-  const dispatch = useAppDispatch()
+export default function RootLayout() {
+  const { session, isLoading } = useSession()
 
+  if (isLoading) {
+    return <Text>Loading...</Text>
+  }
+
+  if (!session) {
+    return <Redirect href="/sign-in" />
+  }
+
+  const dispatch = useAppDispatch()
   const router = useRouter()
-  const { isSignedIn } = useAuth()
 
   const openChatHistory = () => {
     router.push('/history')
@@ -67,7 +76,6 @@ const Layout = () => {
               </Pressable>
             ),
           }}
-          redirect={!isSignedIn}
         />
         <Tabs.Screen
           name="analysis"
@@ -78,7 +86,6 @@ const Layout = () => {
               <MaterialIcons name="analytics" color={color} size={size} />
             ),
           }}
-          redirect={!isSignedIn}
         />
         <Tabs.Screen
           name="chat"
@@ -111,7 +118,6 @@ const Layout = () => {
               </Pressable>
             ),
           }}
-          redirect={!isSignedIn}
         />
         <Tabs.Screen
           name="profile"
@@ -127,11 +133,8 @@ const Layout = () => {
             ),
             headerRight: () => <LogoutButton />,
           }}
-          redirect={!isSignedIn}
         />
       </Tabs>
     </>
   )
 }
-
-export default Layout
