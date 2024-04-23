@@ -83,8 +83,8 @@ const Layout = () => {
         <Tabs.Screen
           name="chat"
           options={{
-            headerTitle: 'IA Assistant',
-            tabBarLabel: 'IA Assistant',
+            headerTitle: 'AI Assistant',
+            tabBarLabel: 'AI Assistant',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="message-outline"
