@@ -56,7 +56,6 @@ const Layout = () => {
               <Pressable
                 className="ml-5"
                 onPress={() => {
-                  console.log('toggleFiltersModal')
                   dispatch(toggleFiltersModal())
                 }}
               >

@@ -27,7 +27,6 @@ const Page = () => {
   const isFiltersCategoryModalOpen = useAppSelector(
     selectIsFiltersCategoryModalOpen,
   )
-  console.log('isFiltersCategoryModalOpen', isFiltersCategoryModalOpen)
   const [refreshing, setRefreshing] = useState(false)
   const [subscriptions, setSubscriptions] = useState<Subscription[] | null>()
   const [filteredSubscriptions, setFilteredSubscriptions] =
