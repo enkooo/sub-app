@@ -57,7 +57,7 @@ const Profile = () => {
   return (
     <SafeAreaView style={defaultStyles.container}>
       {user && (
-        <View className="items-center gap-5 rounded-2xl bg-gray-50 p-6">
+        <View className="items-center gap-5 rounded-2xl bg-gray-50 p-6 flex-1">
           <TouchableOpacity onPress={onCaptureImage}>
             <Image
               source={{ uri: user?.imageUrl }}
