@@ -1,10 +1,10 @@
 import React from 'react'
-import { useAuth } from '@clerk/clerk-expo'
 import { Pressable } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { useSession } from '@/ctx'
 
 export default function LogoutButton() {
-  const { signOut } = useAuth()
+  const { signOut } = useSession()
 
   const handleLogout = () => {
     signOut()
