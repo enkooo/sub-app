@@ -17,6 +17,8 @@ import { toggleFiltersModal } from '@/state/categoryFiltersSlice'
 
 export default function RootLayout() {
   const { session, isLoading } = useSession()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   if (isLoading) {
     return <Text>Loading...</Text>
@@ -25,9 +27,6 @@ export default function RootLayout() {
   if (!session) {
     return <Redirect href="/sign-in" />
   }
-
-  const dispatch = useAppDispatch()
-  const router = useRouter()
 
   const openChatHistory = () => {
     router.push('/history')
