@@ -5,6 +5,7 @@ import axios from '@/api/axiosConfig'
 import * as SecureStore from 'expo-secure-store'
 
 type User = {
+  id?: number
   name?: string
   email: string
   password: string
@@ -50,6 +51,8 @@ export const login = createAsyncThunk(
     try {
       const response = await axios.post('/api/sanctum/token', userData)
       await SecureStore.setItemAsync('token', response.data)
+
+      console.log('response', response.data)
 
       return response.data
     } catch (error) {

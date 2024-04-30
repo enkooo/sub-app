@@ -6,7 +6,6 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native-gesture-handler'
-import userSubscription from '@/assets/userSubscription.json'
 import { Subscription } from '@/types/Subscription'
 import SubscriptionItem from '@/components/SubscriptionItem'
 import Colors from '@/constants/Colors'
@@ -21,29 +20,58 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
+import { Category } from '@/types/Category'
+import { getSubscriptions } from '@/api/apis/getSubscriptions'
+import { selectCurrentUser } from '@/state/authSlice'
 
 const Page = () => {
   const dispatch = useAppDispatch()
   const isFiltersCategoryModalOpen = useAppSelector(
     selectIsFiltersCategoryModalOpen,
   )
+  const currentUser = useAppSelector(selectCurrentUser)
   const [refreshing, setRefreshing] = useState(false)
-  const [subscriptions, setSubscriptions] = useState<Subscription[] | null>()
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>()
   const [filteredSubscriptions, setFilteredSubscriptions] =
     useState(subscriptions)
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>()
 
-  const loadData = () => {
-    setRefreshing(true)
+  const fetchSubscriptions = async () => {
+    try {
+      setRefreshing(true)
 
-    setTimeout(() => {
+      const response = await getSubscriptions({ userID: currentUser?.id! })
+
+      setSubscriptions(response)
+    } catch (error) {
+      console.error('Failed to fetch subscriptions:', error)
+    } finally {
       setRefreshing(false)
-      setSubscriptions(userSubscription.items)
-    }, 1000)
+    }
   }
 
   useEffect(() => {
-    loadData()
+    fetchSubscriptions()
   }, [])
+
+  useEffect(() => {
+    const categories = subscriptions?.map((item) => ({
+      key: item.id,
+      value: item.category,
+      isChecked: true,
+    }))
+
+    const seenCategories = new Set()
+    const uniqueCategories = categories?.filter((item) => {
+      if (!seenCategories.has(item.value)) {
+        seenCategories.add(item.value)
+        return true
+      }
+      return false
+    })
+
+    setSelectedCategories(uniqueCategories)
+  }, [subscriptions])
 
   const onRemove = useCallback((subscriptionItem: Subscription) => {
     setSubscriptions((items) =>
@@ -51,28 +79,12 @@ const Page = () => {
     )
   }, [])
 
-  const categories = userSubscription.items.map((item) => ({
-    key: item.id,
-    value: item.category,
-    isChecked: true,
-  }))
-  const seenCategories = new Set()
-  const uniqueCategories = categories.filter((item) => {
-    if (!seenCategories.has(item.value)) {
-      seenCategories.add(item.value)
-      return true
-    }
-    return false
-  })
-
-  const [selectedCategories, setSelectedCategories] = useState(uniqueCategories)
-
   useEffect(() => {
     const activeCategories = selectedCategories
-      .filter((c) => c.isChecked)
-      .map((c) => c.value)
+      ?.filter((c) => c.isChecked)
+      ?.map((c) => c.value)
     const filteredSubscriptions = subscriptions?.filter((subscription) =>
-      activeCategories.includes(subscription.category),
+      activeCategories?.includes(subscription.category),
     )
 
     setFilteredSubscriptions(filteredSubscriptions)
@@ -103,7 +115,7 @@ const Page = () => {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={loadData}
+              onRefresh={fetchSubscriptions}
               tintColor={Colors.grey}
             />
           }
@@ -135,7 +147,7 @@ const Page = () => {
                 Select category filters
               </Text>
               <ScrollView className="gap-2">
-                {selectedCategories.map((category) => (
+                {selectedCategories?.map((category) => (
                   <BouncyCheckbox
                     key={category.key}
                     size={32}

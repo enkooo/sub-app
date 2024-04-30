@@ -3,7 +3,7 @@ import { defaultStyles } from '@/constants/Styles'
 import { useCaptureImage } from '@/hooks/useCaptureImage'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Pressable,
   Image,
@@ -15,8 +15,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import subCategories from '@/assets/subCategories.json'
-import subCycles from '@/assets/subCycles.json'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -28,33 +26,18 @@ import {
   runOnJS,
 } from 'react-native-reanimated'
 import CheckboxesBottomSheetModal from '@/components/CheckboxesBottomSheetModal'
-
-const _iconStyle = () => ({
-  height: 33,
-  width: 33,
-})
+import { getCycles } from '@/api/apis/getCycles'
+import { getCategories } from '@/api/apis/getCategories'
+import { useFetchCheckboxItems } from '@/hooks/useFetchCheckboxItems'
+import { IconStyle } from '@/constants/IconStyle'
+import { createSubscription } from '@/api/apis/createSubscription'
+import { selectCurrentUser } from '@/state/authSlice'
+import { useAppSelector } from '@/hooks/rtk'
+import { createCategory } from '@/api/apis/createCategory'
 
 const AddNewSubscription = () => {
-  const [categories, setCategories] = useState<CheckboxButton[]>(
-    subCategories.map((category) => ({
-      id: category.id,
-      text: category.value,
-      fillColor: Colors.primary,
-      unFillColor: Colors.primaryLight,
-      iconStyle: _iconStyle(),
-      textStyle: { textDecorationLine: 'none' },
-    })),
-  )
-  const [cycles, setCycles] = useState<CheckboxButton[]>(
-    subCycles.map((cycle) => ({
-      id: cycle.id,
-      text: cycle.value,
-      fillColor: Colors.primary,
-      unFillColor: Colors.primaryLight,
-      iconStyle: _iconStyle(),
-      textStyle: { textDecorationLine: 'none' },
-    })),
-  )
+  const [categories, setCategories] = useState<CheckboxButton[]>([])
+  const [cycles, setCycles] = useState<CheckboxButton[]>([])
   const [image, setImage] = useState('')
   const [subscriptionName, setSubscriptionName] = useState('')
   const [subscriptionPrice, setSubscriptionPrice] = useState('')
@@ -65,6 +48,14 @@ const AddNewSubscription = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNewCategory, setIsNewCategory] = useState(false)
+  const currentUser = useAppSelector(selectCurrentUser)
+
+  useEffect(() => {
+    useFetchCheckboxItems(getCycles, setCycles)
+    useFetchCheckboxItems(getCategories, setCategories)
+  }, [])
+
+  console.log('cycles', cycles)
 
   const showDatePicker = () => {
     setDatePickerVisibility(true)
@@ -102,7 +93,14 @@ const AddNewSubscription = () => {
     setIsModalOpen(false)
   }
 
-  const handleAddNewCategory = () => {
+  const handleAddNewCategory = async () => {
+    if (!newCategoryName) {
+      alert('Please fill the field')
+      return
+    }
+
+    await createCategory({ name: newCategoryName })
+
     setCategories((prevCategories) => [
       ...prevCategories,
       {
@@ -110,7 +108,7 @@ const AddNewSubscription = () => {
         text: newCategoryName.toLocaleLowerCase(),
         fillColor: Colors.primary,
         unFillColor: Colors.primaryLight,
-        iconStyle: _iconStyle(),
+        iconStyle: IconStyle(),
         textStyle: { textDecorationLine: 'none' },
       },
     ])
@@ -136,6 +134,39 @@ const AddNewSubscription = () => {
       setIsNewCategory(true)
       expandHeight.value = withTiming(targetHeight, { duration: 500 })
     }
+  }
+
+  const handleAddNewSubscription = async () => {
+    if (
+      !subscriptionName ||
+      !subscriptionPrice ||
+      !selectedCategory ||
+      !selectedCycle ||
+      !startDate ||
+      !image
+    ) {
+      alert('Please fill all fields')
+      return
+    }
+
+    const selectedCycleId = cycles.find(
+      (cycle) => cycle.text === selectedCycle,
+    )?.id
+    const selectedCategoryId = categories.find(
+      (category) => category.text === selectedCategory,
+    )?.id
+
+    const response = await createSubscription({
+      image,
+      user_id: currentUser?.id!,
+      name: subscriptionName,
+      currency: 'PLN',
+      currency_value: Number(subscriptionPrice),
+      cycle_id: Number(selectedCycleId),
+      category_id: Number(selectedCategoryId),
+    })
+
+    console.log('response', response)
   }
 
   return (
@@ -220,7 +251,7 @@ const AddNewSubscription = () => {
                 isDarkModeEnabled={false}
                 textColor="black"
               />
-              <Pressable>
+              <Pressable onPress={handleAddNewSubscription}>
                 <View className="bg-primary rounded-lg py-3 justify-center items-center mt-3 mb-6">
                   <Text className="text-white font-bold">Add subscription</Text>
                 </View>
