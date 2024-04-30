@@ -27,9 +27,6 @@ export default function SignIn() {
       return
     }
 
-    console.log('email', email)
-    console.log('password', password)
-
     dispatch(
       login({
         email,

@@ -33,10 +33,6 @@ export default function SignIn() {
       return
     }
 
-    console.log('username', username)
-    console.log('email', email)
-    console.log('password', password)
-
     dispatch(
       register({
         email,

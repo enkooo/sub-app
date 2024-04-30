@@ -52,8 +52,6 @@ export const login = createAsyncThunk(
       const response = await axios.post('/api/sanctum/token', userData)
       await SecureStore.setItemAsync('token', response.data)
 
-      console.log('response', response.data)
-
       return response.data
     } catch (error) {
       if (error instanceof AxiosError) {

@@ -55,8 +55,6 @@ const AddNewSubscription = () => {
     useFetchCheckboxItems(getCategories, setCategories)
   }, [])
 
-  console.log('cycles', cycles)
-
   const showDatePicker = () => {
     setDatePickerVisibility(true)
   }
@@ -166,7 +164,16 @@ const AddNewSubscription = () => {
       category_id: Number(selectedCategoryId),
     })
 
-    console.log('response', response)
+    if (response) {
+      alert('Subscription added successfully')
+    }
+
+    setImage('')
+    setSubscriptionName('')
+    setSubscriptionPrice('')
+    setSelectedCategory('')
+    setSelectedCycle('')
+    setStartDate('')
   }
 
   return (
