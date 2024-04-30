@@ -42,6 +42,12 @@ export default function AppLayout() {
           headerTitle: 'Welcome',
         }}
       />
+      <Stack.Screen
+        name="sign-up"
+        options={{
+          headerTitle: 'Sign Up',
+        }}
+      />
     </Stack>
   )
 }

@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect, useRouter } from 'expo-router'
-import { useSession } from '../../../ctx'
 import { Tabs } from 'expo-router'
 import Colors from '@/constants/Colors'
 import {
@@ -10,21 +9,31 @@ import {
 } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import LogoutButton from '@/components/LogoutButton'
-import { Pressable, Text } from 'react-native'
-import { useAppDispatch } from '@/hooks/rtk'
+import { ActivityIndicator, Pressable, Text } from 'react-native'
+import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
 import { newChat } from '@/state/chatSlice'
 import { toggleFiltersModal } from '@/state/categoryFiltersSlice'
+import {
+  getCurrentUser,
+  selectCurrentUser,
+  selectIsLoadingAuth,
+} from '@/state/authSlice'
 
 export default function RootLayout() {
-  const { session, isLoading } = useSession()
+  const currentUser = useAppSelector(selectCurrentUser)
+  const isLoadingAuth = useAppSelector(selectIsLoadingAuth)
   const dispatch = useAppDispatch()
   const router = useRouter()
 
-  if (isLoading) {
-    return <Text>Loading...</Text>
+  useEffect(() => {
+    dispatch(getCurrentUser())
+  }, [dispatch])
+
+  if (isLoadingAuth) {
+    return <ActivityIndicator size="large" />
   }
 
-  if (!session) {
+  if (!isLoadingAuth && currentUser === null) {
     return <Redirect href="/sign-in" />
   }
 
