@@ -1,13 +1,17 @@
 import React from 'react'
 import { Pressable } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { useSession } from '@/ctx'
+import { useRouter } from 'expo-router'
+import { useAppDispatch } from '@/hooks/rtk'
+import { logout } from '@/state/authSlice'
 
 export default function LogoutButton() {
-  const { signOut } = useSession()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const handleLogout = () => {
-    signOut()
+    dispatch(logout())
+    router.replace('/sign-in')
   }
 
   return (

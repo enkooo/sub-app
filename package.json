@@ -57,11 +57,13 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
+    "@types/remote-redux-devtools": "^0.5.8",
     "jest": "^29.2.1",
     "jest-expo": "^50.0.4",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.13",
     "react-test-renderer": "18.2.0",
+    "remote-redux-devtools": "^0.5.16",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.1.3"
   },
