@@ -10,7 +10,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-import { Ionicons } from '@expo/vector-icons'
+import { FontAwesome6, Ionicons } from '@expo/vector-icons'
 
 type SubscriptionItemProps = {
   item: Subscription
@@ -66,6 +66,14 @@ const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
     opacity: opacity.value,
   }))
 
+  const shortenText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...'
+    }
+
+    return text
+  }
+
   return (
     <Animated.View
       style={[rItemContainerStyle]}
@@ -87,26 +95,40 @@ const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
           className="w-[90%] h-20 bg-white shadow rounded-lg px-4 flex-row items-center"
         >
           <View style={{ width: 40, height: 40, aspectRatio: 1 }}>
-            <Image
-              style={{
-                flex: 1,
-                width: null,
-                height: null,
-                resizeMode: 'contain',
-              }}
-              source={{ uri: item.icon_url }}
-            />
+            {item.image ? (
+              <Image
+                style={{
+                  flex: 1,
+                  width: null,
+                  height: null,
+                  resizeMode: 'contain',
+                }}
+                source={{ uri: item.image }}
+              />
+            ) : (
+              <View className="flex-1 items-center justify-center">
+                <FontAwesome6 name="image" size={38} color="black" />
+              </View>
+            )}
           </View>
           <View className="ml-6">
-            <Text className="font-bold text-xl">{item.name}</Text>
-            <Text className="text-xs text-gray-500">{item.category}</Text>
+            <Text className="font-bold text-xl">
+              {shortenText(item.name, 12)}
+            </Text>
+            <Text className="text-xs text-gray-500 capitalize">
+              {item.category.name}
+            </Text>
           </View>
           <View className="ml-auto">
             <Text className="font-bold ml-auto">
               {item.currency_value} {item.currency}{' '}
               <Text className="text-xs text-gray-500 font-normal">on</Text>
             </Text>
-            <Text className="text-xs text-gray-500">{item.next_payment}</Text>
+            <Text className="text-xs text-gray-500 text-right">
+              {new Date(item.next_payment)
+                .toLocaleDateString('pl-PL')
+                .replace(/\//g, '-')}
+            </Text>
           </View>
         </Animated.View>
       </PanGestureHandler>

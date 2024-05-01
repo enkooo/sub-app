@@ -57,7 +57,7 @@ const Page = () => {
   useEffect(() => {
     const categories = subscriptions?.map((item) => ({
       key: item.id,
-      value: item.category,
+      value: item.category.name,
       isChecked: true,
     }))
 
@@ -83,8 +83,9 @@ const Page = () => {
     const activeCategories = selectedCategories
       ?.filter((c) => c.isChecked)
       ?.map((c) => c.value)
+
     const filteredSubscriptions = subscriptions?.filter((subscription) =>
-      activeCategories?.includes(subscription.category),
+      activeCategories?.includes(subscription.category.name),
     )
 
     setFilteredSubscriptions(filteredSubscriptions)
