@@ -1,6 +1,5 @@
 import { Dimensions, Image, Text, View } from 'react-native'
 import React from 'react'
-import { ChatHistoryItem as ChatHistoryItemType } from '@/types/ChatHistoryItem'
 import { Subscription } from '@/types/Subscription'
 import { PanGestureHandler } from 'react-native-gesture-handler'
 import Animated, {

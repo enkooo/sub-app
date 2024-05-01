@@ -23,6 +23,15 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { Category } from '@/types/Category'
 import { getSubscriptions } from '@/api/apis/getSubscriptions'
 import { selectCurrentUser } from '@/state/authSlice'
+import SegmentedControl from '@/libraries/SegmentedControl/SegmentedControl'
+
+const SEGMENT_CYCLE = [
+  { id: 0, name: 'All' },
+  { id: 1, name: 'Daily' },
+  { id: 2, name: 'Weekly' },
+  { id: 3, name: 'Monthly' },
+  { id: 4, name: 'Yearly' },
+]
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -35,6 +44,7 @@ const Page = () => {
   const [filteredSubscriptions, setFilteredSubscriptions] =
     useState(subscriptions)
   const [selectedCategories, setSelectedCategories] = useState<Category[]>()
+  const [tabIndex, setTabIndex] = useState(0)
 
   const fetchSubscriptions = async () => {
     try {
@@ -84,12 +94,23 @@ const Page = () => {
       ?.filter((c) => c.isChecked)
       ?.map((c) => c.value)
 
-    const filteredSubscriptions = subscriptions?.filter((subscription) =>
-      activeCategories?.includes(subscription.category.name),
-    )
+    const cycleFilter =
+      tabIndex > 0 ? SEGMENT_CYCLE[tabIndex].name.toLocaleLowerCase() : null
+
+    const filteredSubscriptions = subscriptions?.filter((subscription) => {
+      const categoryMatch = activeCategories?.includes(
+        subscription.category.name,
+      )
+
+      const cycleMatch =
+        tabIndex === 0 ||
+        subscription.cycle?.name?.toLocaleLowerCase() === cycleFilter
+
+      return categoryMatch && cycleMatch
+    })
 
     setFilteredSubscriptions(filteredSubscriptions)
-  }, [selectedCategories, subscriptions])
+  }, [selectedCategories, subscriptions, tabIndex])
 
   const snapPoints = useMemo(() => ['25%', '50%'], [])
   const categoriesBottomSheetModal = useRef<BottomSheetModal>(null)
@@ -107,7 +128,21 @@ const Page = () => {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <GestureHandlerRootView className="flex-1">
+      <View style={{ marginHorizontal: 18 }}>
+        <SegmentedControl
+          containerMargin={18}
+          segments={SEGMENT_CYCLE.map((item) => item.name)}
+          onChange={(index) => setTabIndex(index)}
+          currentIndex={tabIndex}
+          segmentedControlWrapper={{
+            backgroundColor: 'rgba(229 231 235 / 0.5)',
+            marginTop: 16,
+          }}
+          inactiveTextStyle={{ color: 'black' }}
+        />
+      </View>
+
+      <GestureHandlerRootView className="flex-1 mt-2">
         <FlatList
           data={filteredSubscriptions}
           renderItem={({ item }) => (
