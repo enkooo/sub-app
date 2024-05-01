@@ -148,6 +148,11 @@ const Page = () => {
           renderItem={({ item }) => (
             <SubscriptionItem key={item.id} item={item} onRemove={onRemove} />
           )}
+          ListEmptyComponent={
+            <Text style={{ textAlign: 'center', marginTop: 20 }}>
+              No subscriptions found
+            </Text>
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -182,7 +187,7 @@ const Page = () => {
               <Text className="my-3 text-xl font-bold">
                 Select category filters
               </Text>
-              <ScrollView className="gap-2">
+              <ScrollView className="gap-2 mb-2">
                 {selectedCategories?.map((category) => (
                   <BouncyCheckbox
                     key={category.key}
