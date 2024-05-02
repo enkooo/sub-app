@@ -31,11 +31,13 @@ import { getCategories } from '@/api/apis/getCategories'
 import { useFetchCheckboxItems } from '@/hooks/useFetchCheckboxItems'
 import { IconStyle } from '@/constants/IconStyle'
 import { createSubscription } from '@/api/apis/createSubscription'
-import { useAppDispatch } from '@/hooks/rtk'
+import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
 import { createCategory } from '@/api/apis/createCategory'
 import { setIsRefreshNeeded } from '@/state/subscriptionSlice'
+import { selectCurrentUser } from '@/state/authSlice'
 
 const AddNewSubscription = () => {
+  const currentUser = useAppSelector(selectCurrentUser)
   const [categories, setCategories] = useState<CheckboxButton[]>([])
   const [cycles, setCycles] = useState<CheckboxButton[]>([])
   const [image, setImage] = useState('')
@@ -97,7 +99,7 @@ const AddNewSubscription = () => {
       return
     }
 
-    await createCategory({ name: newCategoryName })
+    await createCategory({ name: newCategoryName, user_id: currentUser?.id! })
 
     setCategories((prevCategories) => [
       ...prevCategories,

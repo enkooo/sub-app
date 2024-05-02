@@ -31,15 +31,17 @@ import { getCycles } from '@/api/apis/getCycles'
 import { getCategories } from '@/api/apis/getCategories'
 import { useFetchCheckboxItems } from '@/hooks/useFetchCheckboxItems'
 import { IconStyle } from '@/constants/IconStyle'
-import { useAppDispatch } from '@/hooks/rtk'
+import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
 import { createCategory } from '@/api/apis/createCategory'
 import { setIsRefreshNeeded } from '@/state/subscriptionSlice'
 import { useLocalSearchParams } from 'expo-router'
 import { getSubscriptionById } from '@/api/apis/getSubscriptionById'
 import { editSubscription } from '@/api/apis/editSubscription'
+import { selectCurrentUser } from '@/state/authSlice'
 
 const EditSubscription = () => {
   const { id } = useLocalSearchParams()
+  const currentUser = useAppSelector(selectCurrentUser)
   const [isLoading, setIsLoading] = useState(false)
   const [categories, setCategories] = useState<CheckboxButton[]>([])
   const [cycles, setCycles] = useState<CheckboxButton[]>([])
@@ -118,7 +120,7 @@ const EditSubscription = () => {
       return
     }
 
-    await createCategory({ name: newCategoryName })
+    await createCategory({ name: newCategoryName, user_id: currentUser?.id! })
 
     setCategories((prevCategories) => [
       ...prevCategories,
