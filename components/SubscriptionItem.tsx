@@ -9,18 +9,24 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-import { FontAwesome6, Ionicons } from '@expo/vector-icons'
+import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons'
 
 type SubscriptionItemProps = {
   item: Subscription
   onRemove: (item: Subscription) => void
+  onEdit: (item: Subscription) => void
 }
 
 const { width } = Dimensions.get('window')
 
-const TRANSLATE_X_THRESHOLD = -width * 0.3
+const TRANSLATE_X_THRESHOLD_LEFT = -width * 0.3
+const TRANSLATE_X_THRESHOLD_RIGHT = width * 0.3
 
-const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
+const SubscriptionItem = ({
+  item,
+  onRemove,
+  onEdit,
+}: SubscriptionItemProps) => {
   const translateX = useSharedValue(0)
   const itemHeight = useSharedValue(80) // h-20
   const marginVertical = useSharedValue(10)
@@ -31,8 +37,7 @@ const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
       translateX.value = event.translationX
     },
     onEnd: () => {
-      const shouldRemove = translateX.value < TRANSLATE_X_THRESHOLD
-      if (shouldRemove) {
+      if (translateX.value < TRANSLATE_X_THRESHOLD_LEFT) {
         translateX.value = withTiming(-width)
         itemHeight.value = withTiming(0)
         marginVertical.value = withTiming(0)
@@ -41,6 +46,9 @@ const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
             runOnJS(onRemove)(item)
           }
         })
+      } else if (translateX.value > TRANSLATE_X_THRESHOLD_RIGHT) {
+        runOnJS(onEdit)(item)
+        translateX.value = withTiming(0)
       } else {
         translateX.value = withTiming(0)
       }
@@ -50,13 +58,18 @@ const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
   const rItemStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateX: translateX.value < 0 ? translateX.value : 0,
+        translateX: translateX.value,
       },
     ],
   }))
 
   const rIconStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(translateX.value < TRANSLATE_X_THRESHOLD ? 1 : 0),
+    opacity: withTiming(
+      translateX.value < TRANSLATE_X_THRESHOLD_LEFT ||
+        translateX.value > TRANSLATE_X_THRESHOLD_RIGHT
+        ? 1
+        : 0,
+    ),
   }))
 
   const rItemContainerStyle = useAnimatedStyle(() => ({
@@ -83,6 +96,12 @@ const SubscriptionItem = ({ item, onRemove }: SubscriptionItemProps) => {
         className="h-20 w-20 absolute right-8 justify-center items-center"
       >
         <Ionicons name="trash-outline" size={30} color="black" />
+      </Animated.View>
+      <Animated.View
+        style={[rIconStyle]}
+        className="h-20 w-20 absolute left-8 justify-center items-center"
+      >
+        <Feather name="edit" size={30} color="black" />
       </Animated.View>
       <PanGestureHandler
         failOffsetY={[-5, 5]}

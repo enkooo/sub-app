@@ -28,6 +28,7 @@ import {
   selectIsRefreshNeeded,
   setIsRefreshNeeded,
 } from '@/state/subscriptionSlice'
+import { useRouter } from 'expo-router'
 
 const SEGMENT_CYCLE = [
   { id: 0, name: 'All' },
@@ -38,6 +39,7 @@ const SEGMENT_CYCLE = [
 ]
 
 const Page = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const isFiltersCategoryModalOpen = useAppSelector(
     selectIsFiltersCategoryModalOpen,
@@ -103,6 +105,10 @@ const Page = () => {
     )
   }, [])
 
+  const onEdit = useCallback(async (subscriptionItem: Subscription) => {
+    router.push(`/editSubscription/${subscriptionItem.id}`)
+  }, [])
+
   useEffect(() => {
     const activeCategories = selectedCategories
       ?.filter((c) => c.isChecked)
@@ -160,7 +166,12 @@ const Page = () => {
         <FlatList
           data={filteredSubscriptions}
           renderItem={({ item }) => (
-            <SubscriptionItem key={item.id} item={item} onRemove={onRemove} />
+            <SubscriptionItem
+              key={item.id}
+              item={item}
+              onRemove={onRemove}
+              onEdit={onEdit}
+            />
           )}
           ListEmptyComponent={
             <Text style={{ textAlign: 'center', marginTop: 20 }}>

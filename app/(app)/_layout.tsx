@@ -25,6 +25,18 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="(modals)/editSubscription/[id]"
+        options={{
+          presentation: 'modal',
+          headerTitle: 'Edit subscription',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="close-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
         name="(modals)/history"
         options={{
           presentation: 'modal',
