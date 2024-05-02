@@ -23,13 +23,22 @@ const initialState: AuthState = {
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (userData: User, thunkAPI) => {
+  async (
+    userData: {
+      email: string
+      name: string
+      password: string
+      password_confirmation: string
+    },
+    thunkAPI,
+  ) => {
     try {
-      const response = await axios.post('/register', {
-        user: userData,
-      })
+      const response = await axios.post('/api/register', userData)
+      await SecureStore.setItemAsync('token', response.data)
 
-      return response.data.user
+      console.log(response.data)
+
+      return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
@@ -49,7 +58,7 @@ export const login = createAsyncThunk(
   'auth/login',
   async (userData: { email: string; password: string }, thunkAPI) => {
     try {
-      const response = await axios.post('/api/sanctum/token', userData)
+      const response = await axios.post('/api/login', userData)
       await SecureStore.setItemAsync('token', response.data)
 
       return response.data
@@ -106,7 +115,7 @@ export const authSlice = createSlice({
       register.fulfilled,
       (state, action: PayloadAction<User>) => {
         state.isLoading = false
-        state.currentUser = action.payload
+        // state.currentUser = action.payload
       },
     )
     builder.addCase(register.rejected, (state) => {

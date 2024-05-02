@@ -1,5 +1,4 @@
 import axios from '@/api/axiosConfig'
-import userSubscription from '@/assets/userSubscription.json'
 
 export const getSubscriptions = async (params: { userID: number }) => {
   try {
@@ -7,6 +6,9 @@ export const getSubscriptions = async (params: { userID: number }) => {
 
     return response.data.data
   } catch (error) {
+    if ((error as any)?.response?.status === 401) {
+      return error
+    }
     throw error
   }
 }

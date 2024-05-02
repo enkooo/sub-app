@@ -38,8 +38,9 @@ export default function SignIn() {
         email,
         name: username,
         password,
+        password_confirmation: passwordRepeat,
       }),
-    ).then((action) => {
+    ).then(() => {
       router.replace('/')
     })
   }
