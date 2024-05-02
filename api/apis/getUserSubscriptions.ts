@@ -1,8 +1,8 @@
 import axios from '@/api/axiosConfig'
 
-export const getSubscriptions = async (params: { userID: number }) => {
+export const getUserSubscriptions = async () => {
   try {
-    const response = await axios.get('/api/subscriptions', { params })
+    const response = await axios.get('/api/user/subscriptions')
 
     return response.data.data
   } catch (error) {

@@ -21,8 +21,7 @@ import {
 } from '@gorhom/bottom-sheet'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { Category } from '@/types/Category'
-import { getSubscriptions } from '@/api/apis/getSubscriptions'
-import { selectCurrentUser } from '@/state/authSlice'
+import { getUserSubscriptions } from '@/api/apis/getUserSubscriptions'
 import SegmentedControl from '@/libraries/SegmentedControl/SegmentedControl'
 
 const SEGMENT_CYCLE = [
@@ -38,7 +37,6 @@ const Page = () => {
   const isFiltersCategoryModalOpen = useAppSelector(
     selectIsFiltersCategoryModalOpen,
   )
-  const currentUser = useAppSelector(selectCurrentUser)
   const [refreshing, setRefreshing] = useState(false)
   const [subscriptions, setSubscriptions] = useState<Subscription[]>()
   const [filteredSubscriptions, setFilteredSubscriptions] =
@@ -50,7 +48,7 @@ const Page = () => {
     try {
       setRefreshing(true)
 
-      const response = await getSubscriptions({ userID: currentUser?.id! })
+      const response = await getUserSubscriptions()
 
       setSubscriptions(response)
     } catch (error) {
@@ -197,6 +195,7 @@ const Page = () => {
                     text={category.value}
                     textStyle={{
                       textDecorationLine: 'none',
+                      textTransform: 'capitalize',
                     }}
                     innerIconStyle={{
                       borderWidth: 0,
