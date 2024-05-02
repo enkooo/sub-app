@@ -15,8 +15,6 @@ export const editSubscription = async (
   try {
     const response = await axios.put(`/api/subscriptions/${id}`, params)
 
-    console.log('response', response)
-
     return response.data
   } catch (error) {
     throw error

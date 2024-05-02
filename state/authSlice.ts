@@ -36,8 +36,6 @@ export const register = createAsyncThunk(
       const response = await axios.post('/api/register', userData)
       await SecureStore.setItemAsync('token', response.data)
 
-      console.log(response.data)
-
       return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
