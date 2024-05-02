@@ -23,6 +23,11 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { Category } from '@/types/Category'
 import { getUserSubscriptions } from '@/api/apis/getUserSubscriptions'
 import SegmentedControl from '@/libraries/SegmentedControl/SegmentedControl'
+import { deleteSubscription } from '@/api/apis/deleteSubscription'
+import {
+  selectIsRefreshNeeded,
+  setIsRefreshNeeded,
+} from '@/state/subscriptionSlice'
 
 const SEGMENT_CYCLE = [
   { id: 0, name: 'All' },
@@ -37,6 +42,7 @@ const Page = () => {
   const isFiltersCategoryModalOpen = useAppSelector(
     selectIsFiltersCategoryModalOpen,
   )
+  const isRefreshNeeded = useAppSelector(selectIsRefreshNeeded)
   const [refreshing, setRefreshing] = useState(false)
   const [subscriptions, setSubscriptions] = useState<Subscription[]>()
   const [filteredSubscriptions, setFilteredSubscriptions] =
@@ -55,12 +61,13 @@ const Page = () => {
       console.error('Failed to fetch subscriptions:', error)
     } finally {
       setRefreshing(false)
+      dispatch(setIsRefreshNeeded(false))
     }
   }
 
   useEffect(() => {
     fetchSubscriptions()
-  }, [])
+  }, [isRefreshNeeded])
 
   useEffect(() => {
     const categories = subscriptions?.map((item) => ({
@@ -81,7 +88,16 @@ const Page = () => {
     setSelectedCategories(uniqueCategories)
   }, [subscriptions])
 
-  const onRemove = useCallback((subscriptionItem: Subscription) => {
+  const onRemove = useCallback(async (subscriptionItem: Subscription) => {
+    const response = await deleteSubscription({
+      id: Number(subscriptionItem.id),
+    })
+
+    if (response.status !== 204) {
+      console.error('Failed to delete subscription:', response)
+      return
+    }
+
     setSubscriptions((items) =>
       items?.filter((item) => item.id !== subscriptionItem.id),
     )

@@ -31,9 +31,9 @@ import { getCategories } from '@/api/apis/getCategories'
 import { useFetchCheckboxItems } from '@/hooks/useFetchCheckboxItems'
 import { IconStyle } from '@/constants/IconStyle'
 import { createSubscription } from '@/api/apis/createSubscription'
-import { selectCurrentUser } from '@/state/authSlice'
-import { useAppSelector } from '@/hooks/rtk'
+import { useAppDispatch } from '@/hooks/rtk'
 import { createCategory } from '@/api/apis/createCategory'
+import { setIsRefreshNeeded } from '@/state/subscriptionSlice'
 
 const AddNewSubscription = () => {
   const [categories, setCategories] = useState<CheckboxButton[]>([])
@@ -48,7 +48,7 @@ const AddNewSubscription = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNewCategory, setIsNewCategory] = useState(false)
-  const currentUser = useAppSelector(selectCurrentUser)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     useFetchCheckboxItems(getCycles, setCycles)
@@ -156,16 +156,18 @@ const AddNewSubscription = () => {
 
     const response = await createSubscription({
       image,
-      user_id: currentUser?.id!,
       name: subscriptionName,
       currency: 'PLN',
       currency_value: Number(subscriptionPrice),
       cycle_id: Number(selectedCycleId),
       category_id: Number(selectedCategoryId),
+      start_date: startDate,
     })
 
     if (response) {
       alert('Subscription added successfully')
+    } else {
+      alert('Failed to add subscription')
     }
 
     setImage('')
@@ -174,6 +176,7 @@ const AddNewSubscription = () => {
     setSelectedCategory('')
     setSelectedCycle('')
     setStartDate('')
+    dispatch(setIsRefreshNeeded(true))
   }
 
   return (
