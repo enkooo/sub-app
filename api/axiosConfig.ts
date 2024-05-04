@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store'
 
-const API_URL = process.env.EXPO_PUBLIC_CLERK_API_URL
+const API_URL = process.env.EXPO_PUBLIC_API_URL
 
 axios.defaults.baseURL = API_URL
 

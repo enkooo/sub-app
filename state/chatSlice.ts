@@ -28,10 +28,14 @@ export const chatSlice = createSlice({
     removeLastMessage: (state) => {
       state.messages.pop()
     },
+    loadChatMessages: (state, action: PayloadAction<Message[]>) => {
+      state.messages = action.payload
+    },
   },
 })
 
-export const { addMessage, newChat, removeLastMessage } = chatSlice.actions
+export const { addMessage, newChat, removeLastMessage, loadChatMessages } =
+  chatSlice.actions
 export const selectChatMessages = (state: RootState) => state.chat.messages
 
 export default chatSlice.reducer

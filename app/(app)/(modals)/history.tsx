@@ -1,32 +1,90 @@
-import { StatusBar } from 'expo-status-bar'
-import React, { useCallback, useState } from 'react'
-import { Platform, View } from 'react-native'
-import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
-import chatHistoryJson from '@/assets/chatHistory.json'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Pressable, Text, View } from 'react-native'
+import {
+  FlatList,
+  GestureHandlerRootView,
+  RefreshControl,
+} from 'react-native-gesture-handler'
 import ChatHistoryItem from '@/components/ChatHistoryItem'
 import { ChatHistoryItem as ChatHistoryItemType } from '@/types/ChatHistoryItem'
+import { useRouter } from 'expo-router'
+import { getUserConversations } from '@/api/apis/getUserConversations'
+import { deleteConversation } from '@/api/apis/deleteConversation'
 
 const History = () => {
-  const [chatHistory, setChatHistory] = useState(chatHistoryJson.items)
+  const [chatHistory, setChatHistory] = useState<ChatHistoryItemType[] | null>()
+  const [refreshing, setRefreshing] = useState(false)
+  const router = useRouter()
+
+  const getUserChatHistory = async () => {
+    try {
+      setRefreshing(true)
+      const response = await getUserConversations()
+      setChatHistory(response)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
+  const removeChatHistoryItem = async (id: string) => {
+    try {
+      await deleteConversation({ id: id })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    getUserChatHistory()
+  }, [])
 
   const onRemove = useCallback((chatHistoryItem: ChatHistoryItemType) => {
     setChatHistory((items) =>
-      items.filter((item) => item.id !== chatHistoryItem.id),
+      items?.filter((item) => item.id !== chatHistoryItem.id),
     )
+
+    removeChatHistoryItem(chatHistoryItem.id)
   }, [])
 
   return (
     <View className="flex-1 bg-gray-50">
-      <GestureHandlerRootView>
+      <GestureHandlerRootView className="flex-1">
         <FlatList
-          contentContainerStyle={{ marginTop: 10 }}
+          contentContainerStyle={{
+            marginTop: 10,
+            paddingBottom: 20,
+          }}
           data={chatHistory}
           renderItem={({ item }) => (
-            <ChatHistoryItem key={item.id} item={item} onRemove={onRemove} />
+            <Pressable
+              onPress={() => {
+                console.log('item', item)
+                router.back()
+                router.push(`/chat/${item.id}`)
+              }}
+              key={item.id}
+            >
+              <ChatHistoryItem item={item} onRemove={onRemove} />
+            </Pressable>
           )}
+          ListEmptyComponent={
+            refreshing ? null : (
+              <Text style={{ textAlign: 'center', marginTop: 20 }}>
+                No history found!
+              </Text>
+            )
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={getUserChatHistory}
+              tintColor="gray"
+            />
+          }
         />
       </GestureHandlerRootView>
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>
   )
 }

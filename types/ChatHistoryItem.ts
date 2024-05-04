@@ -1,6 +1,6 @@
 export type ChatHistoryItem = {
   id: string
   title: string
-  create_time: string
-  update_time: string
+  created_at: string
+  updated_at: string
 }

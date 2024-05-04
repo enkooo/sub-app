@@ -11,7 +11,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
 
-type ChatHistoryItemProps = {
+interface ChatHistoryItemProps {
   item: ChatHistoryItemType
   onRemove: (item: ChatHistoryItemType) => void
 }
@@ -87,7 +87,7 @@ const ChatHistoryItem = ({ item, onRemove }: ChatHistoryItemProps) => {
         >
           <Text className="text-base">{item.title}</Text>
           <Text className="text-xs text-gray-500">
-            {new Date(item.update_time).toLocaleString()}
+            {new Date(item.updated_at).toLocaleString()}
           </Text>
         </Animated.View>
       </PanGestureHandler>

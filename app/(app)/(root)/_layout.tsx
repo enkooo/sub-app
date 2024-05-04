@@ -9,7 +9,12 @@ import {
 } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import LogoutButton from '@/components/LogoutButton'
-import { ActivityIndicator, Pressable, Text } from 'react-native'
+import {
+  ActivityIndicator,
+  Pressable,
+  Text,
+  TouchableOpacity,
+} from 'react-native'
 import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
 import { newChat } from '@/state/chatSlice'
 import { toggleFiltersModal } from '@/state/categoryFiltersSlice'
@@ -43,6 +48,7 @@ export default function RootLayout() {
 
   const startNewChat = () => {
     dispatch(newChat())
+    router.push(`/chat/new`)
   }
 
   return (
@@ -96,7 +102,7 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="chat"
+          name="chat/[id]"
           options={{
             headerTitle: 'AI Assistant',
             tabBarLabel: 'AI Assistant',
@@ -124,6 +130,9 @@ export default function RootLayout() {
                   color="black"
                 />
               </Pressable>
+            ),
+            tabBarButton: (props) => (
+              <TouchableOpacity {...props} onPress={startNewChat} />
             ),
           }}
         />
