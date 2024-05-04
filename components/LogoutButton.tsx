@@ -15,7 +15,7 @@ export default function LogoutButton() {
   }
 
   return (
-    <Pressable onPress={handleLogout} style={{ marginRight: 10 }}>
+    <Pressable onPress={handleLogout} style={{ marginRight: 20 }}>
       <Ionicons name="log-out-outline" size={24} />
     </Pressable>
   )
