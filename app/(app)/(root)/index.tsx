@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import {
   GestureHandlerRootView,
   FlatList,
@@ -29,6 +29,7 @@ import {
   setIsRefreshNeeded,
 } from '@/state/subscriptionSlice'
 import { useRouter } from 'expo-router'
+import * as Notifications from 'expo-notifications'
 
 const SEGMENT_CYCLE = [
   { id: 0, name: 'All' },
@@ -37,6 +38,30 @@ const SEGMENT_CYCLE = [
   { id: 3, name: 'Monthly' },
   { id: 4, name: 'Yearly' },
 ]
+
+async function schedulePushNotification() {
+  const currentDate = new Date()
+  console.log('currentDate1', currentDate)
+  currentDate.setSeconds(currentDate.getSeconds() + 10)
+  console.log('currentDate2', currentDate)
+
+  const futureDate = new Date('2024-05-04 22:03:00')
+  console.log('futureDate1', futureDate)
+
+  const response = await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: 'Here is the notification body',
+      data: { data: 'goes here' },
+    },
+    trigger: { date: futureDate },
+  })
+
+  console.log('response', response)
+  // async function cancelNotification(id) {
+  //   await Notifications.cancelScheduledNotificationAsync(id)
+  // }
+}
 
 const Page = () => {
   const router = useRouter()
@@ -148,6 +173,10 @@ const Page = () => {
 
   return (
     <View className="flex-1 bg-gray-50">
+      <Button
+        title="Schedule test notifications"
+        onPress={schedulePushNotification}
+      />
       <View style={{ marginHorizontal: 18 }}>
         <SegmentedControl
           containerMargin={18}
