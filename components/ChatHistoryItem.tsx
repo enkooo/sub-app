@@ -87,7 +87,9 @@ const ChatHistoryItem = ({ item, onRemove }: ChatHistoryItemProps) => {
         >
           <Text className="text-base">{item.title}</Text>
           <Text className="text-xs text-gray-500">
-            {new Date(item.updated_at).toLocaleString()}
+            {new Date(item.updated_at)
+              .toLocaleDateString('pl-PL')
+              .replace(/\//g, '-')}
           </Text>
         </Animated.View>
       </PanGestureHandler>
