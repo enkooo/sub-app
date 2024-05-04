@@ -60,7 +60,6 @@ const History = () => {
           renderItem={({ item }) => (
             <Pressable
               onPress={() => {
-                console.log('item', item)
                 router.back()
                 router.push(`/chat/${item.id}`)
               }}

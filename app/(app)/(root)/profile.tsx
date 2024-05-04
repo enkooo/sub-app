@@ -85,7 +85,6 @@ const Profile = () => {
         old_password: oldPassword,
       })
 
-      console.log('response.data', response.data)
       if (response.data.error) {
         alert(response.data.error)
       }
