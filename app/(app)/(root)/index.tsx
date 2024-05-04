@@ -166,12 +166,14 @@ const Page = () => {
         <FlatList
           data={filteredSubscriptions}
           renderItem={({ item }) => (
-            <SubscriptionItem
-              key={item.id}
-              item={item}
-              onRemove={onRemove}
-              onEdit={onEdit}
-            />
+            <Pressable onLongPress={() => onEdit(item)}>
+              <SubscriptionItem
+                key={item.id}
+                item={item}
+                onRemove={onRemove}
+                onEdit={onEdit}
+              />
+            </Pressable>
           )}
           ListEmptyComponent={
             <Text style={{ textAlign: 'center', marginTop: 20 }}>
