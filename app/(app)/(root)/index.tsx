@@ -70,7 +70,9 @@ const Page = () => {
 
     for (const subscription of subscriptions) {
       const subscriptionDate = new Date(subscription.next_payment)
-      subscriptionDate.setSeconds(subscriptionDate.getSeconds())
+      subscriptionDate.setSeconds(
+        subscriptionDate.getSeconds() - 2 * 24 * 60 * 60,
+      )
 
       if (subscriptionDate > currentDate) {
         const notificationDate = await getDateForName(subscription.name)
