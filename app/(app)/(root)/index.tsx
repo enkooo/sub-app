@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import {
   GestureHandlerRootView,
   FlatList,
@@ -29,6 +29,8 @@ import {
   setIsRefreshNeeded,
 } from '@/state/subscriptionSlice'
 import { useRouter } from 'expo-router'
+import { useSchedulePushNotification } from '@/hooks/useSchedulePushNotification'
+import * as SecureStore from 'expo-secure-store'
 
 const SEGMENT_CYCLE = [
   { id: 0, name: 'All' },
@@ -38,7 +40,54 @@ const SEGMENT_CYCLE = [
   { id: 4, name: 'Yearly' },
 ]
 
+async function saveDateForName(name: string, notificationDate: string) {
+  try {
+    await SecureStore.setItemAsync(
+      name.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, ''),
+      notificationDate,
+    )
+  } catch (error) {
+    console.error('Error saving notificationDate:', error)
+  }
+}
+
+async function getDateForName(name: string) {
+  try {
+    const notificationDate = await SecureStore.getItemAsync(
+      name.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, ''),
+    )
+    return notificationDate
+  } catch (error) {
+    console.error('Error getting id:', error)
+    return null
+  }
+}
+
 const Page = () => {
+  async function schedulePushNotification(subscriptions: Subscription[]) {
+    const currentDate = new Date()
+    currentDate.setSeconds(currentDate.getSeconds())
+
+    for (const subscription of subscriptions) {
+      const subscriptionDate = new Date(subscription.next_payment)
+      subscriptionDate.setSeconds(subscriptionDate.getSeconds())
+
+      if (subscriptionDate > currentDate) {
+        const notificationDate = await getDateForName(subscription.name)
+        if (notificationDate === subscriptionDate.toDateString()) {
+          continue
+        }
+
+        await useSchedulePushNotification(subscriptionDate, subscription.name)
+
+        await saveDateForName(
+          subscription.name,
+          subscriptionDate.toDateString(),
+        )
+      }
+    }
+  }
+
   const router = useRouter()
   const dispatch = useAppDispatch()
   const isFiltersCategoryModalOpen = useAppSelector(
@@ -59,6 +108,7 @@ const Page = () => {
       const response = await getUserSubscriptions()
 
       setSubscriptions(response)
+      schedulePushNotification(response)
     } catch (error) {
       console.error('Failed to fetch subscriptions:', error)
     } finally {
