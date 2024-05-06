@@ -66,13 +66,11 @@ async function getDateForName(name: string) {
 const Page = () => {
   async function schedulePushNotification(subscriptions: Subscription[]) {
     const currentDate = new Date()
-    currentDate.setSeconds(currentDate.getSeconds())
+    currentDate.setDate(currentDate.getDate())
 
     for (const subscription of subscriptions) {
       const subscriptionDate = new Date(subscription.next_payment)
-      subscriptionDate.setSeconds(
-        subscriptionDate.getSeconds() - 2 * 24 * 60 * 60,
-      )
+      subscriptionDate.setDate(subscriptionDate.getDate() - 2)
 
       if (subscriptionDate > currentDate) {
         const notificationDate = await getDateForName(subscription.name)
