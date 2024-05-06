@@ -67,9 +67,6 @@ export default function RootLayout() {
     }
   }, [])
 
-  console.log('expoPushToken:', expoPushToken)
-  console.log('notification:', notification)
-
   const currentUser = useAppSelector(selectCurrentUser)
   const isLoadingAuth = useAppSelector(selectIsLoadingAuth)
   const dispatch = useAppDispatch()

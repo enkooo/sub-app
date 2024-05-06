@@ -29,7 +29,8 @@ import {
   setIsRefreshNeeded,
 } from '@/state/subscriptionSlice'
 import { useRouter } from 'expo-router'
-import * as Notifications from 'expo-notifications'
+import { useSchedulePushNotification } from '@/hooks/useSchedulePushNotification'
+import * as SecureStore from 'expo-secure-store'
 
 const SEGMENT_CYCLE = [
   { id: 0, name: 'All' },
@@ -39,31 +40,54 @@ const SEGMENT_CYCLE = [
   { id: 4, name: 'Yearly' },
 ]
 
-async function schedulePushNotification() {
-  const currentDate = new Date()
-  console.log('currentDate1', currentDate)
-  currentDate.setSeconds(currentDate.getSeconds() + 10)
-  console.log('currentDate2', currentDate)
+async function saveDateForName(name: string, notificationDate: string) {
+  try {
+    await SecureStore.setItemAsync(
+      name.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, ''),
+      notificationDate,
+    )
+  } catch (error) {
+    console.error('Error saving notificationDate:', error)
+  }
+}
 
-  const futureDate = new Date('2024-05-04 22:03:00')
-  console.log('futureDate1', futureDate)
-
-  const response = await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: 'Here is the notification body',
-      data: { data: 'goes here' },
-    },
-    trigger: { date: futureDate },
-  })
-
-  console.log('response', response)
-  // async function cancelNotification(id) {
-  //   await Notifications.cancelScheduledNotificationAsync(id)
-  // }
+async function getDateForName(name: string) {
+  try {
+    const notificationDate = await SecureStore.getItemAsync(
+      name.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, ''),
+    )
+    return notificationDate
+  } catch (error) {
+    console.error('Error getting id:', error)
+    return null
+  }
 }
 
 const Page = () => {
+  async function schedulePushNotification(subscriptions: Subscription[]) {
+    const currentDate = new Date()
+    currentDate.setSeconds(currentDate.getSeconds())
+
+    for (const subscription of subscriptions) {
+      const subscriptionDate = new Date(subscription.next_payment)
+      subscriptionDate.setSeconds(subscriptionDate.getSeconds())
+
+      if (subscriptionDate > currentDate) {
+        const notificationDate = await getDateForName(subscription.name)
+        if (notificationDate === subscriptionDate.toDateString()) {
+          continue
+        }
+
+        await useSchedulePushNotification(subscriptionDate, subscription.name)
+
+        await saveDateForName(
+          subscription.name,
+          subscriptionDate.toDateString(),
+        )
+      }
+    }
+  }
+
   const router = useRouter()
   const dispatch = useAppDispatch()
   const isFiltersCategoryModalOpen = useAppSelector(
@@ -84,6 +108,7 @@ const Page = () => {
       const response = await getUserSubscriptions()
 
       setSubscriptions(response)
+      schedulePushNotification(response)
     } catch (error) {
       console.error('Failed to fetch subscriptions:', error)
     } finally {
@@ -173,10 +198,6 @@ const Page = () => {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <Button
-        title="Schedule test notifications"
-        onPress={schedulePushNotification}
-      />
       <View style={{ marginHorizontal: 18 }}>
         <SegmentedControl
           containerMargin={18}
