@@ -50,9 +50,7 @@ export default function RootLayout() {
       })
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response)
-      })
+      Notifications.addNotificationResponseReceivedListener((response) => {})
 
     return () => {
       if (notificationListener.current) {

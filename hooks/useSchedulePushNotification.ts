@@ -4,8 +4,6 @@ export const useSchedulePushNotification = async (
   date: Date,
   subscriptionName: string,
 ) => {
-  console.log('date', date)
-  console.log('subscriptionName', subscriptionName)
   const id = await Notifications.scheduleNotificationAsync({
     content: {
       title: `${subscriptionName} subscription`,
