@@ -9,6 +9,11 @@ type Cycle = {
   name: string
 }
 
+type Image = {
+  id: string
+  url: string
+}
+
 export type Subscription = {
   id: string
   name: string
@@ -17,7 +22,7 @@ export type Subscription = {
   next_payment: string
   category: Category
   category_id: number
-  image: string
+  image: Image
   created_at: string
   cycle: Cycle
   cycle_id: number

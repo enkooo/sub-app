@@ -64,6 +64,10 @@ const Profile = () => {
 
     if (!result.canceled) {
       setImage(`data:image/png;base64,${result.assets[0].base64}`)
+
+      await editUser(currentUser?.id!, {
+        base64_image: `data:image/png;base64,${result.assets[0].base64}`,
+      })
     }
   }
 

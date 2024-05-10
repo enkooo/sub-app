@@ -82,7 +82,7 @@ export const getCurrentUser = createAsyncThunk(
     try {
       const response = await axios.get('/api/user')
 
-      return response.data
+      return response.data.data
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =

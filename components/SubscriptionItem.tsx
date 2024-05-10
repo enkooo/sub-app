@@ -121,7 +121,7 @@ const SubscriptionItem = ({
                   height: null,
                   resizeMode: 'contain',
                 }}
-                source={{ uri: item.image }}
+                source={{ uri: item.image.url }}
               />
             ) : (
               <View className="flex-1 items-center justify-center">

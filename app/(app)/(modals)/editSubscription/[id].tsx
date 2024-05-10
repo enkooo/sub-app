@@ -1,7 +1,7 @@
 import Colors from '@/constants/Colors'
 import { defaultStyles } from '@/constants/Styles'
 import { useCaptureImage } from '@/hooks/useCaptureImage'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -68,7 +68,7 @@ const EditSubscription = () => {
     setStartDate(response.start_date.split(' ')[0])
     setSelectedCycle(response.cycle.name)
     setSelectedCategory(response.category.name)
-    // setImage(response.image)
+    setImage(response?.image?.url)
     setIsLoading(false)
   }
 
@@ -178,7 +178,7 @@ const EditSubscription = () => {
     )?.id
 
     const response = await editSubscription(id as string, {
-      image,
+      base64_image: image,
       name: subscriptionName,
       currency: 'PLN',
       currency_value: Number(subscriptionPrice),
@@ -212,18 +212,27 @@ const EditSubscription = () => {
                 <View className="flex-row justify-center" style={{ gap: 10 }}>
                   <TouchableOpacity onPress={onCaptureImage}>
                     <View className="w-28 h-28 justify-center items-center bg-white rounded-lg shadow">
-                      {image ? (
-                        <Image
-                          source={{ uri: image }}
-                          className="w-28 h-28 justify-center items-center bg-white rounded-lg shadow"
-                        />
-                      ) : (
-                        <MaterialCommunityIcons
-                          name="image-plus"
-                          size={64}
-                          color="black"
-                        />
-                      )}
+                      <View style={{ width: 100, height: 100, aspectRatio: 1 }}>
+                        {image ? (
+                          <Image
+                            style={{
+                              flex: 1,
+                              width: null,
+                              height: null,
+                              resizeMode: 'contain',
+                            }}
+                            source={{ uri: image }}
+                          />
+                        ) : (
+                          <View className="flex-1 items-center justify-center">
+                            <MaterialCommunityIcons
+                              name="image-plus"
+                              size={64}
+                              color="black"
+                            />
+                          </View>
+                        )}
+                      </View>
                     </View>
                   </TouchableOpacity>
                 </View>

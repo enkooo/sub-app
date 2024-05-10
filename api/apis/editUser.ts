@@ -3,7 +3,7 @@ import axios from '@/api/axiosConfig'
 export const editUser = async (
   id: number,
   params: {
-    image?: string
+    base64_image?: string
     name?: string
     password?: string
     password_confirmation?: string

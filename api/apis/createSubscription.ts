@@ -1,7 +1,7 @@
 import axios from '@/api/axiosConfig'
 
 export const createSubscription = async (params: {
-  image?: string
+  base64_image?: string
   name: string
   currency: string
   currency_value: number

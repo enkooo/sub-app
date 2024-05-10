@@ -35,12 +35,13 @@ import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
 import { createCategory } from '@/api/apis/createCategory'
 import { setIsRefreshNeeded } from '@/state/subscriptionSlice'
 import { selectCurrentUser } from '@/state/authSlice'
+import { decode as atob, encode as btoa } from 'base-64'
 
 const AddNewSubscription = () => {
   const currentUser = useAppSelector(selectCurrentUser)
   const [categories, setCategories] = useState<CheckboxButton[]>([])
   const [cycles, setCycles] = useState<CheckboxButton[]>([])
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState<any>('')
   const [subscriptionName, setSubscriptionName] = useState('')
   const [subscriptionPrice, setSubscriptionPrice] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -157,7 +158,7 @@ const AddNewSubscription = () => {
     )?.id
 
     const response = await createSubscription({
-      image,
+      base64_image: image,
       name: subscriptionName,
       currency: 'PLN',
       currency_value: Number(subscriptionPrice),
