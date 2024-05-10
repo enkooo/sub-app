@@ -1,3 +1,5 @@
+import { Image } from '@/types/Image'
+
 type Category = {
   id: number
   name: string
@@ -7,11 +9,6 @@ type Category = {
 type Cycle = {
   id: number
   name: string
-}
-
-type Image = {
-  id: string
-  url: string
 }
 
 export type Subscription = {

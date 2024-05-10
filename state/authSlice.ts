@@ -3,13 +3,14 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 import axios from '@/api/axiosConfig'
 import * as SecureStore from 'expo-secure-store'
+import { Image as ImageType } from '@/types/Image'
 
 type User = {
   id?: number
   name?: string
   email: string
   password: string
-  image?: string
+  image?: ImageType
 }
 
 type AuthState = {

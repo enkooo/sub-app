@@ -41,8 +41,9 @@ const Profile = () => {
   useEffect(() => {
     if (!currentUser) return
 
-    setName(currentUser.name!)
+    setName(currentUser.name || '')
     setEmail(currentUser.email)
+    setImage(currentUser.image?.url || '')
   }, [currentUser])
 
   const onSaveUser = async () => {
