@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import {
   GestureHandlerRootView,
   FlatList,
@@ -108,7 +108,10 @@ const Page = () => {
       const response = await getUserSubscriptions()
 
       setSubscriptions(response)
-      schedulePushNotification(response)
+
+      if (response.length) {
+        schedulePushNotification(response)
+      }
     } catch (error) {
       console.error('Failed to fetch subscriptions:', error)
     } finally {
