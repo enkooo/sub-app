@@ -1,0 +1,9 @@
+{
+  "texts": [
+    "Netflix: ID=8414ba4b-758f-4076-b4d3-b8c21fb63670, Currency=PLN, Value=20, Next Payment=2025-01-01, Category=Entertainment, Icon URL=https://bi-jingo.com/wp-content/uploads/2009/03/netflix-logo-png-clip-art.png, Created At=2021-01-01, Cycle=monthly",
+    "Spotify: ID=81d4ba00-ba5f-46ee-9407-340542550553, Currency=PLN, Value=40, Next Payment=2024-02-02, Category=Music, Icon URL=https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/240px-Spotify_logo_without_text.svg.png, Created At=2021-01-01, Cycle=monthly",
+    "YouTube: ID=0f5fa16e-37cd-42c1-aee5-28a0e89aed28, Currency=PLN, Value=10, Next Payment=2024-06-06, Category=Entertainment, Icon URL=https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png, Created At=2021-01-01, Cycle=monthly",
+    "1Password: ID=19492fdb-deca-41ca-ad75-508a016b0114, Currency=PLN, Value=40, Next Payment=2024-05-03, Category=Security, Icon URL=https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/1Password_favicon.svg/480px-1Password_favicon.svg.png, Created At=2021-01-01, Cycle=monthly",
+    "Amazon Prime: ID=c2c4d898-5363-4d03-93b4-b2a09d31ace5, Currency=PLN, Value=450, Next Payment=2024-08-09, Category=Shopping, Icon URL=https://download.logo.wine/logo/Amazon_Prime/Amazon_Prime-Logo.wine.png, Created At=2021-01-01, Cycle=monthly"
+  ]
+}

@@ -25,8 +25,17 @@ import { sendCompletions } from '@/api/apis/sendCompletions'
 import { getConversation } from '@/api/apis/getConversation'
 import { updateConversation } from '@/api/apis/updateConversation'
 import { createConversation } from '@/api/apis/createConversation'
+import SegmentedControl from '@/libraries/SegmentedControl/SegmentedControl'
+import { sendQuestion } from '@/api/apis/sendQuestion'
+import { newChat } from '@/state/chatSlice'
+
+const SEGMENT_MODES = [
+  { id: 0, name: 'Chat' },
+  { id: 1, name: 'Q&A' },
+]
 
 const Chat = () => {
+  const [tabIndex, setTabIndex] = useState(0)
   const currentUser = useAppSelector(selectCurrentUser)
   const { id } = useLocalSearchParams()
 
@@ -37,6 +46,8 @@ const Chat = () => {
       dispatch(loadChatMessages(messages))
     } catch (error) {
       dispatch(loadChatMessages([]))
+    } finally {
+      setTabIndex(0)
     }
   }
 
@@ -67,6 +78,13 @@ const Chat = () => {
   }
 
   useEffect(() => {
+    if (tabIndex === 1) {
+      dispatch(newChat())
+      router.push(`/chat/new`)
+    }
+  }, [tabIndex])
+
+  useEffect(() => {
     if (id !== 'new') {
       getChatConversation()
     }
@@ -80,10 +98,11 @@ const Chat = () => {
 
   useEffect(() => {
     if (messages.length === 1 && id !== 'new') {
+      setTabIndex(0)
       router.push(`/chat/new`)
     }
 
-    if (messages.length === 3 && id === 'new') {
+    if (messages.length === 3 && id === 'new' && tabIndex === 0) {
       const title = messages[1].content.substring(0, 40)
       const isBotLoading = messages[2].role === 'bot-loading'
       if (isBotLoading) return
@@ -95,7 +114,7 @@ const Chat = () => {
       )
     }
 
-    if (messages.length >= 4 && id !== 'new') {
+    if (messages.length >= 4 && id !== 'new' && tabIndex === 0) {
       updateChatConversation(messages)
     }
 
@@ -114,19 +133,49 @@ const Chat = () => {
     dispatch(addMessage(loadingMessage))
     setPrompt('')
 
-    try {
-      const response = await sendCompletions({ messages, userMessage })
-      const answer = response.data.choices?.[0]?.message
+    if (tabIndex === 0) {
+      try {
+        const response = await sendCompletions({ messages, userMessage })
+        const answer = response.data.choices?.[0]?.message
 
-      dispatch(removeLastMessage())
-      dispatch(addMessage(answer))
-    } catch (error) {
-      console.error('Error:', error)
+        dispatch(removeLastMessage())
+        dispatch(addMessage(answer))
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    } else if (tabIndex === 1) {
+      try {
+        const response = await sendQuestion({
+          question: prompt,
+        })
+        const answer = {
+          role: 'ai',
+          content: response.data.choices?.[0]?.message?.content,
+        }
+        dispatch(removeLastMessage())
+        dispatch(addMessage(answer))
+      } catch (error) {
+        console.error('Error:', error)
+      }
     }
   }
 
   return (
     <View className="flex-1 bg-gray-50">
+      <View style={{ marginHorizontal: 10 }}>
+        <SegmentedControl
+          containerMargin={10}
+          segments={SEGMENT_MODES.map((item) => item.name)}
+          onChange={(index) => setTabIndex(index)}
+          currentIndex={tabIndex}
+          segmentedControlWrapper={{
+            backgroundColor: 'rgba(229 231 235 / 0.5)',
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+          inactiveTextStyle={{ color: 'black' }}
+        />
+      </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={90}
