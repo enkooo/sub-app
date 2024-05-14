@@ -1,18 +1,19 @@
 import * as Notifications from 'expo-notifications'
 
 export const useSchedulePushNotification = async (
-  date: Date,
+  notificationDate: Date,
+  subscriptionDate: Date,
   subscriptionName: string,
 ) => {
   const id = await Notifications.scheduleNotificationAsync({
     content: {
       title: `${subscriptionName} subscription`,
-      body: `The next payment is due on ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`,
+      body: `The next payment is due on ${subscriptionDate.toLocaleDateString()} ${subscriptionDate.toLocaleTimeString()}`,
       data: {
-        data: `The next payment is due on ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`,
+        data: `The next payment is due on ${subscriptionDate.toLocaleDateString()} ${subscriptionDate.toLocaleTimeString()}`,
       },
     },
-    trigger: { date: date },
+    trigger: { date: notificationDate },
   })
 
   return id

@@ -70,19 +70,26 @@ const Page = () => {
 
     for (const subscription of subscriptions) {
       const subscriptionDate = new Date(subscription.next_payment)
-      subscriptionDate.setDate(subscriptionDate.getDate() - 2)
+      const subscriptionNotificationDate = new Date(subscription.next_payment)
+      subscriptionNotificationDate.setDate(
+        subscriptionNotificationDate.getDate() - 2,
+      )
 
-      if (subscriptionDate > currentDate) {
+      if (subscriptionNotificationDate > currentDate) {
         const notificationDate = await getDateForName(subscription.name)
-        if (notificationDate === subscriptionDate.toDateString()) {
+        if (notificationDate === subscriptionNotificationDate.toDateString()) {
           continue
         }
 
-        await useSchedulePushNotification(subscriptionDate, subscription.name)
+        await useSchedulePushNotification(
+          subscriptionNotificationDate,
+          subscriptionDate,
+          subscription.name,
+        )
 
         await saveDateForName(
           subscription.name,
-          subscriptionDate.toDateString(),
+          subscriptionNotificationDate.toDateString(),
         )
       }
     }
