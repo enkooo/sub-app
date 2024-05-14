@@ -11,6 +11,7 @@ type User = {
   email: string
   password: string
   image?: ImageType
+  days_before_notification?: number
 }
 
 type AuthState = {

@@ -31,6 +31,7 @@ import {
 import { useRouter } from 'expo-router'
 import { useSchedulePushNotification } from '@/hooks/useSchedulePushNotification'
 import * as SecureStore from 'expo-secure-store'
+import { selectCurrentUser } from '@/state/authSlice'
 
 const SEGMENT_CYCLE = [
   { id: 0, name: 'All' },
@@ -64,6 +65,8 @@ async function getDateForName(name: string) {
 }
 
 const Page = () => {
+  const currentUser = useAppSelector(selectCurrentUser)
+
   async function schedulePushNotification(subscriptions: Subscription[]) {
     const currentDate = new Date()
     currentDate.setDate(currentDate.getDate())
@@ -72,7 +75,8 @@ const Page = () => {
       const subscriptionDate = new Date(subscription.next_payment)
       const subscriptionNotificationDate = new Date(subscription.next_payment)
       subscriptionNotificationDate.setDate(
-        subscriptionNotificationDate.getDate() - 2,
+        subscriptionNotificationDate.getDate() -
+          (currentUser?.days_before_notification ?? 0),
       )
 
       if (subscriptionNotificationDate > currentDate) {
