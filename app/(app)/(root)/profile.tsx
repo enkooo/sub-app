@@ -217,8 +217,11 @@ const Profile = () => {
                   ) : (
                     <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
                       <View>
-                        <Text>Numbers of days before subscription</Text>
-                        <Text>to sending notification: {notificationDays}</Text>
+                        <Text>Numbers of days to sending notification</Text>
+                        <Text>
+                          before next subscription payment:{' '}
+                          <Text className="font-bold">{notificationDays}</Text>
+                        </Text>
                       </View>
                       <TouchableOpacity
                         onPress={() => setEditNotificationDays(true)}
@@ -232,7 +235,9 @@ const Profile = () => {
                     </View>
                   )}
                 </View>
-                <Text>Email: {email}</Text>
+                <Text>
+                  Email: <Text className="font-bold">{email}</Text>
+                </Text>
                 <Pressable onPress={handlePresentModalPress}>
                   <Text>Change password</Text>
                 </Pressable>
