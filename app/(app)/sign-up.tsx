@@ -33,13 +33,6 @@ export default function SignIn() {
       return
     }
 
-    console.log('register', {
-      email,
-      name: username,
-      password,
-      password_confirmation: passwordRepeat,
-    })
-
     dispatch(
       register({
         email,
