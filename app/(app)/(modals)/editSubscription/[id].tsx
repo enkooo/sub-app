@@ -38,7 +38,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { getSubscriptionById } from '@/api/apis/getSubscriptionById'
 import { editSubscription } from '@/api/apis/editSubscription'
 import { selectCurrentUser } from '@/state/authSlice'
-import SubscriptionForm from '@/components/SubscriptionForm'
+import { SubscriptionForm } from '@/components/SubscriptionForm'
 
 const EditSubscription = () => {
   const { id } = useLocalSearchParams()

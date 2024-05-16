@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router'
 import { useAppDispatch } from '@/hooks/rtk'
 import { logout } from '@/state/authSlice'
 
-export default function LogoutButton() {
+export const LogoutButton = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
 

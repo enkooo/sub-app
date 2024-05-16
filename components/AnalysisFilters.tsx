@@ -17,12 +17,12 @@ type AnalysisFiltersProps = {
   ) => void
 }
 
-export default function AnalysisFilters({
+export const AnalysisFilters = ({
   startDate,
   endDate,
   onChangeStartDate,
   onChangeEndDate,
-}: AnalysisFiltersProps) {
+}: AnalysisFiltersProps) => {
   return (
     <View className="m-4 mt-0">
       <View className="flex-row justify-between mt-4 bg-gray-200/50 rounded-lg">

@@ -31,8 +31,7 @@ type SubscriptionFormProps = {
   handleAddNewSubscription?: () => void
   handleEditSubscription?: () => void
 }
-
-export default function SubscriptionForm({
+export const SubscriptionForm = ({
   onCaptureImage,
   image,
   subscriptionName,
@@ -50,7 +49,7 @@ export default function SubscriptionForm({
   hideDatePicker,
   handleAddNewSubscription,
   handleEditSubscription,
-}: SubscriptionFormProps) {
+}: SubscriptionFormProps) => {
   return (
     <>
       <View className="flex-row justify-center" style={{ gap: 10 }}>

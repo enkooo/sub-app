@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Dimensions, ScrollView, Text, View } from 'react-native'
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker'
-import AnalysisFilters from '@/components/AnalysisFilters'
+import { AnalysisFilters } from '@/components/AnalysisFilters'
 import { BarChart, PieChart } from 'react-native-chart-kit'
 
 const Analysis = () => {

@@ -6,7 +6,7 @@ type MessageProps = {
   message: MessageType
 }
 
-export default function Message({ message }: MessageProps) {
+export const Message = ({ message }: MessageProps) => {
   return (
     <View
       className="p-2 rounded-lg w-4/5"

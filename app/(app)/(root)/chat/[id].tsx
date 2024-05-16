@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { defaultStyles } from '@/constants/Styles'
-import Message from '@/components/Message'
+import { Message } from '@/components/Message'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { useAppDispatch, useAppSelector } from '@/hooks/rtk'

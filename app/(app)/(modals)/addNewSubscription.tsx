@@ -35,7 +35,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
 import { createCategory } from '@/api/apis/createCategory'
 import { setIsRefreshNeeded } from '@/state/subscriptionSlice'
 import { selectCurrentUser } from '@/state/authSlice'
-import SubscriptionForm from '@/components/SubscriptionForm'
+import { SubscriptionForm } from '@/components/SubscriptionForm'
 
 const AddNewSubscription = () => {
   const currentUser = useAppSelector(selectCurrentUser)

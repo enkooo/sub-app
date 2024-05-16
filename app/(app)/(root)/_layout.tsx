@@ -8,7 +8,7 @@ import {
   MaterialIcons,
 } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
-import LogoutButton from '@/components/LogoutButton'
+import { LogoutButton } from '@/components/LogoutButton'
 import {
   ActivityIndicator,
   Platform,
