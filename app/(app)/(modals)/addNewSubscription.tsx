@@ -55,7 +55,10 @@ const AddNewSubscription = () => {
 
   useEffect(() => {
     useFetchCheckboxItems(getCycles, setCycles)
-    useFetchCheckboxItems(getCategories, setCategories)
+    useFetchCheckboxItems(
+      () => getCategories({ id: currentUser?.id! }),
+      setCategories,
+    )
   }, [])
 
   const showDatePicker = () => {
