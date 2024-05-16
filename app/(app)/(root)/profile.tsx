@@ -232,7 +232,7 @@ const Profile = () => {
                     </View>
                   )}
                 </View>
-                <Text>{email}</Text>
+                <Text>Email: {email}</Text>
                 <Pressable onPress={handlePresentModalPress}>
                   <Text>Change password</Text>
                 </Pressable>
