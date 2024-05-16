@@ -8,6 +8,7 @@ export const editUser = async (
     password?: string
     password_confirmation?: string
     old_password?: string
+    days_before_notification?: number
   },
 ) => {
   try {

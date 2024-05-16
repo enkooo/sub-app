@@ -31,8 +31,10 @@ const Profile = () => {
   const currentUser = useAppSelector(selectCurrentUser)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [edit, setEdit] = useState(false)
+  const [editName, setEditName] = useState(false)
+  const [editNotificationDays, setEditNotificationDays] = useState(false)
   const [image, setImage] = useState('')
+  const [notificationDays, setNotificationDays] = useState('')
 
   const [password, setPassword] = useState('')
   const [passwordRepeat, setPasswordRepeat] = useState('')
@@ -44,6 +46,7 @@ const Profile = () => {
     setName(currentUser.name || '')
     setEmail(currentUser.email)
     setImage(currentUser.image?.url || '')
+    setNotificationDays(String(currentUser.days_before_notification))
   }, [currentUser])
 
   const onSaveUser = async () => {
@@ -56,7 +59,21 @@ const Profile = () => {
     } catch (error) {
       console.error(error)
     } finally {
-      setEdit(false)
+      setEditName(false)
+    }
+  }
+
+  const onSaveNotificationDays = async () => {
+    try {
+      if (!notificationDays) return
+
+      await editUser(currentUser?.id!, {
+        days_before_notification: Number(notificationDays),
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setEditNotificationDays(false)
     }
   }
 
@@ -146,7 +163,7 @@ const Profile = () => {
                   )}
                 </TouchableOpacity>
                 <View className="flex-row gap-1">
-                  {edit ? (
+                  {editName ? (
                     <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
                       <TextInput
                         placeholder="First name"
@@ -166,7 +183,46 @@ const Profile = () => {
                   ) : (
                     <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
                       <Text className="font-bold text-2xl">{name}</Text>
-                      <TouchableOpacity onPress={() => setEdit(true)}>
+                      <TouchableOpacity onPress={() => setEditName(true)}>
+                        <Ionicons
+                          name="create-outline"
+                          size={24}
+                          color={Colors.dark}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+                <View className="flex-row gap-1">
+                  {editNotificationDays ? (
+                    <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
+                      <TextInput
+                        placeholder="First name"
+                        keyboardType="numeric"
+                        value={notificationDays || ''}
+                        onChangeText={setNotificationDays}
+                        style={[defaultStyles.inputField, { width: 200 }]}
+                      />
+
+                      <TouchableOpacity
+                        onPress={() => onSaveNotificationDays()}
+                      >
+                        <Ionicons
+                          name="checkmark-outline"
+                          size={24}
+                          color={Colors.dark}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View className="h-10 flex-1 flex-row items-center justify-center gap-2">
+                      <View>
+                        <Text>Numbers of days before subscription</Text>
+                        <Text>to sending notification: {notificationDays}</Text>
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => setEditNotificationDays(true)}
+                      >
                         <Ionicons
                           name="create-outline"
                           size={24}
