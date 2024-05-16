@@ -1,4 +1,4 @@
-import { Dimensions, Text, View } from 'react-native'
+import { Dimensions, Text } from 'react-native'
 import React from 'react'
 import { ChatHistoryItem as ChatHistoryItemType } from '@/types/ChatHistoryItem'
 import { PanGestureHandler } from 'react-native-gesture-handler'

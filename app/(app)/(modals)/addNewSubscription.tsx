@@ -1,21 +1,14 @@
 import Colors from '@/constants/Colors'
-import { defaultStyles } from '@/constants/Styles'
 import { useCaptureImage } from '@/hooks/useCaptureImage'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Pressable,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native'
-import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { CheckboxButton } from 'react-native-bouncy-checkbox-group'

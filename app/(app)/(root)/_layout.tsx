@@ -13,7 +13,6 @@ import {
   ActivityIndicator,
   Platform,
   Pressable,
-  Text,
   TouchableOpacity,
 } from 'react-native'
 import { useAppDispatch, useAppSelector } from '@/hooks/rtk'
