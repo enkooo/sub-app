@@ -33,6 +33,13 @@ export default function SignIn() {
       return
     }
 
+    console.log('register', {
+      email,
+      name: username,
+      password,
+      password_confirmation: passwordRepeat,
+    })
+
     dispatch(
       register({
         email,
@@ -40,8 +47,10 @@ export default function SignIn() {
         password,
         password_confirmation: passwordRepeat,
       }),
-    ).then(() => {
-      router.replace('/')
+    ).then((action) => {
+      if (action.meta.requestStatus === 'fulfilled') {
+        router.replace('/')
+      }
     })
   }
 

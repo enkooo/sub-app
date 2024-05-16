@@ -48,6 +48,8 @@ export const register = createAsyncThunk(
             error.response.data.message) ||
           error.message ||
           error.toString()
+
+        alert(message)
         return thunkAPI.rejectWithValue(message)
       }
       throw error
@@ -71,6 +73,8 @@ export const login = createAsyncThunk(
             error.response.data.message) ||
           error.message ||
           error.toString()
+
+        alert(message)
         return thunkAPI.rejectWithValue(message)
       }
       throw error
@@ -112,21 +116,16 @@ export const authSlice = createSlice({
     builder.addCase(register.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(
-      register.fulfilled,
-      (state, action: PayloadAction<User>) => {
-        state.isLoading = false
-        // state.currentUser = action.payload
-      },
-    )
+    builder.addCase(register.fulfilled, (state) => {
+      state.isLoading = false
+    })
     builder.addCase(register.rejected, (state) => {
       state.isLoading = false
     })
     builder.addCase(login.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
-      // state.currentUser = action.payload
+    builder.addCase(login.fulfilled, (state) => {
       state.isLoading = false
     })
     builder.addCase(login.rejected, (state) => {

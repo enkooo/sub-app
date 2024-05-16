@@ -33,7 +33,9 @@ export default function SignIn() {
         password,
       }),
     ).then((action) => {
-      router.replace('/')
+      if (action.meta.requestStatus === 'fulfilled') {
+        router.replace('/')
+      }
     })
   }
   return (
