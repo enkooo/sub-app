@@ -162,7 +162,6 @@ const Analysis = () => {
             verticalLabelRotation={90}
             yAxisLabel="zł"
             yAxisSuffix=""
-            showValuesOnTopOfBars={true}
             fromZero={true}
             style={{
               borderRadius: 8,
