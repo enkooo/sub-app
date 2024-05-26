@@ -2,16 +2,25 @@ import OpenAI from 'openai'
 import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { JSONLoader } from 'langchain/document_loaders/fs/json'
+import { Context } from '@/types/Context'
+import { useTransformedContext } from '@/hooks/useTransformedContext'
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY })
 
 export async function POST(request: Request) {
+  const { question, context } = await request.json()
+
+  const transformedContext = useTransformedContext(context as Context[])
+
   const createStore = (docs: any) =>
     MemoryVectorStore.fromDocuments(docs, new OpenAIEmbeddings())
 
   const docsFromJSON = () => {
-    const loader = new JSONLoader('app/example.json')
+    const blob = new Blob([JSON.stringify(transformedContext)], {
+      type: 'application/json',
+    })
+    const loader = new JSONLoader(blob)
 
     return loader.load()
   }
@@ -23,7 +32,6 @@ export async function POST(request: Request) {
   }
 
   const store = await loadStore()
-  const { question } = await request.json()
   const results = await store.similaritySearch(question)
 
   const response = await openai.chat.completions.create({
