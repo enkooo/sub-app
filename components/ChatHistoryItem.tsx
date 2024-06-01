@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
+import { useShortenText } from '@/hooks/useShortenText'
 
 interface ChatHistoryItemProps {
   item: ChatHistoryItemType
@@ -85,7 +86,7 @@ const ChatHistoryItem = ({ item, onRemove }: ChatHistoryItemProps) => {
           style={[rItemStyle]}
           className="w-[90%] h-20 bg-white shadow rounded-lg justify-center px-5"
         >
-          <Text className="text-base">{item.title}</Text>
+          <Text className="text-base">{useShortenText(item.title, 35)}</Text>
           <Text className="text-xs text-gray-500">
             {new Date(item.updated_at)
               .toLocaleDateString('pl-PL')

@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons'
+import { useShortenText } from '@/hooks/useShortenText'
 
 type SubscriptionItemProps = {
   item: Subscription
@@ -78,14 +79,6 @@ const SubscriptionItem = ({
     opacity: opacity.value,
   }))
 
-  const shortenText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...'
-    }
-
-    return text
-  }
-
   return (
     <Animated.View
       style={[rItemContainerStyle]}
@@ -131,7 +124,7 @@ const SubscriptionItem = ({
           </View>
           <View className="ml-6">
             <Text className="font-bold text-xl">
-              {shortenText(item.name, 12)}
+              {useShortenText(item.name, 35)}
             </Text>
             <Text className="text-xs text-gray-500 capitalize">
               {item.category.name}
